@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/update-fetcher-tryoutapps" />
             <option value="$PROJECT_DIR$/update-storage-room" />
             <option value="$PROJECT_DIR$/update-ui" />
+            <option value="$PROJECT_DIR$/update-ui-no-op" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

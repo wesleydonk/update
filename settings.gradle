@@ -4,6 +4,7 @@ include ':update-core'
 include ':update-core-no-op'
 include ':update-storage-room'
 include ':update-ui'
+include ':update-ui-no-op'
 include ':update-fetcher-tryoutapps'
 
 // Enable Gradle's version catalog support
