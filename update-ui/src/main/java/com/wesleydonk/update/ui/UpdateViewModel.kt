@@ -4,10 +4,11 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.wesleydonk.update.DownloadResult
-import com.wesleydonk.update.Storage
+import com.wesleydonk.update.Update
 import com.wesleydonk.update.Version
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
+import com.wesleydonk.update.ui.internal.InstallApk
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.extensions.Event
 import com.wesleydonk.update.ui.internal.managers.FileManager
@@ -16,18 +17,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
 
-internal class TryViewModel(
-    private val storage: Storage,
+internal class UpdateViewModel(
+    private val update: Update,
     private val systemDownloadManager: SystemDownloadManager,
     private val fileManager: FileManager
 ) : ViewModel() {
 
-    val installApk = MutableLiveData<Event<Pair<String, String>>>()
+    private val installApkData = MutableLiveData<Event<InstallApk>>()
+    val installApk: LiveData<Event<InstallApk>> = installApkData
 
     private val downloadIdData = MutableLiveData<Long?>()
     private val downloadStatusData = downloadIdData.switchMap { id ->
         id?.let {
-            systemDownloadManager.observe(id).map { result -> result.asStatus() }.asLiveData()
+            systemDownloadManager.observe(id)
+                .map(::transformToStatus)
+                .asLiveData()
         } ?: MutableLiveData(DownloadStatus())
     }
     val downloadStatus: LiveData<DownloadStatus> = downloadStatusData
@@ -36,7 +40,7 @@ internal class TryViewModel(
 
     init {
         viewModelScope.launch {
-            version = storage.get()
+            version = update.getStoredVersion()
                 ?: throw IllegalStateException("UI can only be started when new version is available")
         }
     }
@@ -54,27 +58,33 @@ internal class TryViewModel(
         }
     }
 
-    private fun isDownloadInProgress(): Boolean = downloadIdData.value != null
+    private fun isDownloadInProgress(): Boolean =
+        downloadIdData.value != null && downloadStatusData.value?.downloadPercentage != null
 
-    private fun DownloadResult.asStatus(): DownloadStatus = when (this) {
-        is DownloadResult.Completed -> {
-            installApk.postValue(Event(this.filePath to this.fileMimeType))
-            DownloadStatus(null)
+    private fun transformToStatus(result: DownloadResult): DownloadStatus {
+        // side effect for triggering the install mechanism
+        if (result is DownloadResult.Completed) {
+            val installApk = InstallApk(result.filePath, result.fileMimeType)
+            installApkData.postValue(Event(installApk))
         }
-        DownloadResult.Failed -> DownloadStatus(null)
-        is DownloadResult.InProgress -> DownloadStatus(downloadPercentage = percentage)
+
+        return when (result) {
+            is DownloadResult.Completed -> DownloadStatus(null)
+            DownloadResult.Failed -> DownloadStatus(null)
+            is DownloadResult.InProgress -> DownloadStatus(downloadPercentage = result.percentage)
+        }
     }
 
     class Factory(
-        private val storage: Storage,
         private val context: Context,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TryViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(UpdateViewModel::class.java)) {
+                val update = Update.getInstance()
                 val downloadManager = SystemDownloadManagerImpl(context)
                 val fileManager = FileManagerImpl(context)
                 @Suppress("UNCHECKED_CAST")
-                return TryViewModel(storage, downloadManager, fileManager) as T
+                return UpdateViewModel(update, downloadManager, fileManager) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

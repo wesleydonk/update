@@ -2,7 +2,7 @@ package com.wesleydonk.update
 
 import android.content.Context
 
-class TryConfig(
+class UpdateConfig(
     val context: Context,
 //    val strategy: Strategy,
     val parser: Parser,
@@ -32,8 +32,8 @@ class TryConfig(
             this@Builder.storage = storage
         }
 
-        fun build(context: Context): TryConfig {
-            return TryConfig(
+        fun build(context: Context): UpdateConfig {
+            return UpdateConfig(
                 context,
                 requireNotNull(parser),
                 requireNotNull(storage),

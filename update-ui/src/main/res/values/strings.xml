@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_title">Update available</string>
+    <string name="update_description">Download the new update</string>
+    <string name="update_btn_text">Download now</string>
+</resources>

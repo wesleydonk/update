@@ -7,7 +7,7 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import java.io.File
 
-object IntentUtil {
+internal object IntentUtil {
 
     fun apkInstall(context: Context, filePath: String, mimeType: String): Intent =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

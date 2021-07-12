@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.wesleydonk.update.fetcher.TryoutAppsFetcher
 import com.wesleydonk.update.storage.RoomStorage
-import com.wesleydonk.update.ui.TryFragment
 import com.wesleydonk.update.ui.internal.extensions.showTryFragment
 import kotlinx.coroutines.launch
 
@@ -15,20 +14,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val url = "https://google.com"
+        val url = "https://dept.tryoutapps.com/environments/1159/prince_of_versions"
         val fetcher = TryoutAppsFetcher(this, url)
         val storage = RoomStorage(this)
         val parser = DefaultParser()
 
-        val config = TryConfig.Builder()
+        val config = UpdateConfig.Builder()
             .storage(storage)
             .fetcher(fetcher)
             .parser(parser)
             .build(this)
 
-        val tryNow = Try.Builder()
+        val tryNow = Update.Builder()
             .config(config)
-            .build(this)
+            .build()
 
         lifecycleScope.launch {
             val version = tryNow.checkVersion()

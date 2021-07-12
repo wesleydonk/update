@@ -38,7 +38,6 @@ android {
 
 dependencies {
     implementation project(":update-core")
-    implementation project(":update-storage-room")
     implementation 'com.github.Zhuinden:fragmentviewbindingdelegate-kt:1.0.0'
     implementation libs.kotlin.stdlib
     implementation libs.androidx.core

@@ -6,7 +6,7 @@
 
     <application>
         <provider
-            android:name="com.wesleydonk.update.ui.TryFileProvider"
+            android:name="com.wesleydonk.update.ui.UpdateFileProvider"
             android:authorities="${applicationId}.update.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

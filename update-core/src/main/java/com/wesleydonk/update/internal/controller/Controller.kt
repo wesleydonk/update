@@ -38,7 +38,7 @@ class DefaultController(
     }
 
     companion object {
-        fun ofConfig(config: TryConfig): DefaultController {
+        fun ofConfig(config: UpdateConfig): DefaultController {
             return DefaultController(
                 config.context,
                 config.fetcher,

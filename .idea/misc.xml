@@ -10,6 +10,7 @@
       <map>
         <entry key="sample/src/main/res/layout/activity_main.xml" value="0.1625" />
         <entry key="update-ui/src/main/res/layout/fragment_try.xml" value="0.25" />
+        <entry key="update-ui/src/main/res/layout/fragment_update.xml" value="0.14375" />
         <entry key="update-ui/src/main/res/xml/share_provider.xml" value="0.2598958333333333" />
       </map>
     </option>

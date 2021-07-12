@@ -1,44 +1,34 @@
 package com.wesleydonk.update.ui
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.SyncStateContract
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.wesleydonk.update.storage.RoomStorage
-import com.wesleydonk.update.ui.databinding.FragmentTryBinding
+import com.wesleydonk.update.ui.databinding.FragmentUpdateBinding
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.IntentUtil
 import com.wesleydonk.update.ui.internal.extensions.observeEvent
-import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import java.io.File
 
-class TryFragment internal constructor() : Fragment(R.layout.fragment_try) {
+class UpdateFragment internal constructor() : DialogFragment(R.layout.fragment_update) {
 
-    private val viewModel by viewModels<TryViewModel> {
+    private val viewModel by viewModels<UpdateViewModel> {
         val context = requireContext()
-        val storage = RoomStorage(requireContext())
-        TryViewModel.Factory(storage, context)
+        UpdateViewModel.Factory(context)
     }
 
-    private var binding: FragmentTryBinding? = null
+    private var binding: FragmentUpdateBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentTryBinding.inflate(inflater, container, false).also {
-            this@TryFragment.binding = it
+        val binding = FragmentUpdateBinding.inflate(inflater, container, false).also {
+            this@UpdateFragment.binding = it
         }
         return binding.root
     }
@@ -47,12 +37,16 @@ class TryFragment internal constructor() : Fragment(R.layout.fragment_try) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.downloadStatus.observe(viewLifecycleOwner) { status ->
-            Log.d("TRY", status.toString())
             renderStatus(status)
         }
 
-        viewModel.installApk.observeEvent(viewLifecycleOwner) { (filePath, mimeType) ->
-            val intent = IntentUtil.apkInstall(requireContext(), filePath, mimeType)
+        viewModel.installApk.observeEvent(viewLifecycleOwner) { installApk ->
+            val intent =
+                IntentUtil.apkInstall(
+                    requireContext(),
+                    installApk.filePath,
+                    installApk.fileMimeType
+                )
             startActivity(intent)
         }
 
@@ -67,7 +61,7 @@ class TryFragment internal constructor() : Fragment(R.layout.fragment_try) {
     }
 
     private fun renderStatus(status: DownloadStatus) {
-        binding?.btnDownload?.isEnabled = status.downloadPercentage != null
+        binding?.btnDownload?.isEnabled = status.downloadPercentage == null
         binding?.progressBar?.isVisible = status.downloadPercentage != null
         binding?.progressBar?.progress = status.downloadPercentage ?: 0
     }
@@ -76,8 +70,8 @@ class TryFragment internal constructor() : Fragment(R.layout.fragment_try) {
 
         const val TAG = "TryFragment"
 
-        fun newInstance(): TryFragment {
-            return TryFragment()
+        fun newInstance(): UpdateFragment {
+            return UpdateFragment()
         }
     }
 }
