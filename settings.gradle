@@ -1,0 +1,10 @@
+include ':sample'
+rootProject.name = "Update"
+
+// Enable Gradle's version catalog support
+// https://docs.gradle.org/current/userguide/platforms.html
+enableFeaturePreview("VERSION_CATALOGS")
+include ':update-core'
+include ':update-storage-room'
+include ':update-ui'
+include ':update-fetcher-tryoutapps'
