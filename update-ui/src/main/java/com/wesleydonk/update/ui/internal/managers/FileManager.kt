@@ -4,11 +4,11 @@ import android.content.Context
 
 private const val DIRECTORY_NAME = "Try"
 
-interface FileManager {
+internal interface FileManager {
     fun createFile(version: String): String
 }
 
-class FileManagerImpl(
+internal class FileManagerImpl(
     private val context: Context
 ) : FileManager {
     override fun createFile(version: String): String {

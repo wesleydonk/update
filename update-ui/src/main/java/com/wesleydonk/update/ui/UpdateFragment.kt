@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.wesleydonk.update.ui.databinding.FragmentUpdateBinding
@@ -13,7 +12,7 @@ import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.IntentUtil
 import com.wesleydonk.update.ui.internal.extensions.observeEvent
 
-class UpdateFragment internal constructor() : DialogFragment(R.layout.fragment_update) {
+class UpdateFragment internal constructor() : Fragment(R.layout.fragment_update) {
 
     private val viewModel by viewModels<UpdateViewModel> {
         val context = requireContext()

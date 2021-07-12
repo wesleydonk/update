@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
  */
-open class Event<out T>(private val content: T) {
+internal open class Event<out T>(private val content: T) {
 
     @Suppress("MemberVisibilityCanBePrivate")
     var hasBeenHandled = false
@@ -40,7 +40,7 @@ open class Event<out T>(private val content: T) {
  *
  * [onEventUnhandledContent] is *only* called if the [Event]'s contents has not been handled.
  */
-class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
+internal class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
 
     override fun onChanged(event: Event<T>?) {
         event?.getContentIfNotHandled()?.let { t ->
@@ -50,7 +50,7 @@ class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Obser
 }
 
 @MainThread
-inline fun <T> LiveData<Event<T>>.observeEvent(
+internal inline fun <T> LiveData<Event<T>>.observeEvent(
     owner: LifecycleOwner,
     crossinline onChanged: (T) -> Unit
 ): Observer<Event<T>> {
@@ -62,7 +62,7 @@ inline fun <T> LiveData<Event<T>>.observeEvent(
 }
 
 @MainThread
-inline fun <T> LiveData<Event<T>>.observeEventForever(
+internal inline fun <T> LiveData<Event<T>>.observeEventForever(
     crossinline onChanged: (T) -> Unit
 ): Observer<Event<T>> {
     val wrappedObserver = EventObserver<T> { t ->
