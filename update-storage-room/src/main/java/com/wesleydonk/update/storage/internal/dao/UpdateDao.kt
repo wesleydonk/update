@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface UpdateDao {
 
+    @Query("SELECT * FROM version_table LIMIT 1")
     fun firstOrNullAsFlow(): Flow<VersionModel?>
 
     @Query("SELECT * FROM version_table LIMIT 1")

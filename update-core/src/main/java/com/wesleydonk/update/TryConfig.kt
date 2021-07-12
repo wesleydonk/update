@@ -4,28 +4,28 @@ import android.content.Context
 
 class TryConfig(
     val context: Context,
-    val strategy: Strategy,
+//    val strategy: Strategy,
     val parser: Parser,
     val storage: Storage,
     val fetcher: Fetcher
 ) {
     class Builder(
-        private var strategy: Strategy? = null,
+//        private var strategy: Strategy? = null,
         private var parser: Parser? = null,
         private var fetcher: Fetcher? = null,
         private var storage: Storage? = null,
     ) {
 
-        fun strategy(strategy: Strategy): Builder = apply {
-            this@Builder.strategy = strategy
-        }
+//        fun strategy(strategy: Strategy): Builder = apply {
+//            this@Builder.strategy = strategy
+//        }
 
         fun parser(parser: Parser): Builder = apply {
             this@Builder.parser = parser
         }
 
         fun fetcher(fetcher: Fetcher): Builder = apply {
-            this@Builder.strategy = strategy
+            this@Builder.fetcher = fetcher
         }
 
         fun storage(storage: Storage): Builder = apply {
@@ -35,7 +35,6 @@ class TryConfig(
         fun build(context: Context): TryConfig {
             return TryConfig(
                 context,
-                requireNotNull(strategy),
                 requireNotNull(parser),
                 requireNotNull(storage),
                 requireNotNull(fetcher),

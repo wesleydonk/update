@@ -2,17 +2,22 @@ package com.wesleydonk.update.internal.managers
 
 import android.app.DownloadManager
 import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.wesleydonk.update.DownloadResult
 import com.wesleydonk.update.Version
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlin.math.roundToInt
 
 interface SystemDownloadManager {
-    suspend fun download(version: Version): Long
+    suspend fun download(version: Version, filePath: String): Long
     fun delete(downloadId: Long)
     fun observe(downloadId: Long): Flow<DownloadResult>
 }
@@ -21,80 +26,103 @@ class SystemDownloadManagerImpl(
     private val context: Context,
 ) : SystemDownloadManager {
 
+    private var isDownloading = false
+    private var filePath: String = ""
+
     private val downloadManager: DownloadManager by lazy {
-        context.getSystemService()!!
+        context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     }
 
-    override suspend fun download(version: Version): Long {
+    override suspend fun download(version: Version, filePath: String): Long {
+        this.filePath = filePath
         val url = Uri.parse(version.downloadUrl)
         val request = DownloadManager.Request(url).apply {
-            setDestinationInExternalPublicDir(
-                Environment.DIRECTORY_DOWNLOADS,
-                "update-${version.version}.apk"
-            )
+            val fileUri = "file://$filePath".toUri()
+            setDestinationUri(fileUri)
             setTitle("Download of new version (${version.version})")
         }
 
-        return downloadManager.enqueue(request)
+        return downloadManager.enqueue(request).also {
+            isDownloading = true
+        }
     }
 
     override fun delete(downloadId: Long) {
         downloadManager.remove(downloadId)
     }
 
-    override fun observe(downloadId: Long): Flow<DownloadResult> {
-        val query = DownloadManager.Query().setFilterById(downloadId)
+    override fun observe(downloadId: Long): Flow<DownloadResult> = flow {
+        val query = DownloadManager.Query()
+            .setFilterById(downloadId)
 
-        var isDownloading = true
-        return flow {
-            while (isDownloading) {
-                downloadManager.query(query).use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        val downloadBytes = cursor.getInt(
-                            cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-                        )
-                        val totalBytes = cursor.getInt(
-                            cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-                        )
-                        val status =
-                            cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                        val filePath =
-                            downloadManager.getUriForDownloadedFile(downloadId).toString()
+        while (isDownloading) {
+            val cursor = downloadManager.query(query)
+            if (cursor == null || !cursor.moveToFirst()) {
+                emit(DownloadResult.Failed)
+                return@flow
+            }
 
-                        transformDownload(
-                            downloadBytes,
-                            totalBytes,
-                            status,
-                            filePath
-                        )?.let { (result, isCompleted) ->
-                            emit(result)
-                            isDownloading = !isCompleted
-                        }
-                    }
+            cursor.use {
+
+                val downloadBytes = cursor.getInt(
+                    cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                )
+                val totalBytes = cursor.getInt(
+                    cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                )
+                val status =
+                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                val filePath = filePath
+
+                Log.d("TRY", "current: ${downloadBytes.toString()}")
+                Log.d("TRY", "total: ${totalBytes.toString()}")
+
+                val isCompleted = cursor.isCompleted()
+                val result = transformDownload(
+                    downloadBytes,
+                    totalBytes,
+                    status,
+                    filePath,
+                    downloadId,
+                )
+
+                if (isCompleted) {
+                    isDownloading = false
+                    emit(result)
+                    return@flow
                 }
+
+                emit(result)
             }
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     private fun transformDownload(
         downloadBytes: Int,
         totalBytes: Int,
         status: Int,
-        filePath: String
-    ): Pair<DownloadResult, Boolean>? = when (status) {
-        DownloadManager.STATUS_FAILED -> DownloadResult.Failed to true
-        DownloadManager.STATUS_PENDING,
-        DownloadManager.STATUS_RUNNING -> DownloadResult.InProgress(
+        filePath: String,
+        id: Long,
+    ): DownloadResult = when (status) {
+        DownloadManager.STATUS_FAILED -> DownloadResult.Failed
+        DownloadManager.STATUS_SUCCESSFUL -> {
+            val fileMimeType = downloadManager.getMimeTypeForDownloadedFile(id)
+            DownloadResult.Completed(filePath, fileMimeType)
+        }
+        else -> DownloadResult.InProgress(
             percentageOf(
                 downloadBytes,
                 totalBytes
             )
-        ) to false
-        DownloadManager.STATUS_SUCCESSFUL -> DownloadResult.Completed(filePath) to true
-        else -> null
+        )
     }
 
     private fun percentageOf(value: Int, total: Int): Int {
         return ((value.toFloat() / total.toFloat()) * 100F).roundToInt()
     }
 }
+
+private fun Cursor.isCompleted(): Boolean =
+    getInt(getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL
+
+private fun Cursor.getColumnInt(columnName: String) = getInt(getColumnIndex(columnName))

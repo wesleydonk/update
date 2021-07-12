@@ -7,6 +7,7 @@ sealed class DownloadResult {
     ) : DownloadResult()
 
     class Completed(
-        val filePath: String
+        val filePath: String,
+        val fileMimeType: String,
     ) : DownloadResult()
 }

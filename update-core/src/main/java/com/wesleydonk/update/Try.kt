@@ -22,16 +22,22 @@ class Try(
         return config.storage.get()
     }
 
-    suspend fun downloadVersion(version: Version): Flow<DownloadResult> {
-        val downloadId = systemDownloadManager.download(version)
-        return systemDownloadManager.observe(downloadId)
-    }
+//    suspend fun downloadVersion(version: Version): Flow<DownloadResult> {
+//        val downloadId = systemDownloadManager.download(version)
+//        return systemDownloadManager.observe(downloadId)
+//    }
 
     class Builder(
-        private val config: TryConfig.Builder
+        private var config: TryConfig? = null
     ) {
+
+        fun config(config: TryConfig) = apply {
+            this.config = config
+            this
+        }
+
         fun build(context: Context): Try {
-            return Try(config.build(context))
+            return Try(requireNotNull(config))
         }
     }
 }
