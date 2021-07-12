@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val url = "https://dept.tryoutapps.com/environments/1159/prince_of_versions"
+        val url = "https://google.nl"
         val fetcher = TryoutAppsFetcher(this, url)
         val storage = RoomStorage(this)
         val parser = DefaultParser()
