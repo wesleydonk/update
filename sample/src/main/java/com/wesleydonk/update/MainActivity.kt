@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
             .parser(parser)
             .build(this)
 
-        val tryNow = Update.Builder()
+        val update = Update.Builder()
             .config(config)
             .build()
 
         lifecycleScope.launch {
-            val version = tryNow.checkVersion()
+            val version = update.checkVersion()
             version?.showTryFragment(this@MainActivity)
         }
     }
