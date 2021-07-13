@@ -14,7 +14,7 @@ class Update(
 
     private val controller = DefaultController.ofConfig(config)
 
-    suspend fun checkVersion(): Version? {
+    suspend fun checkLatestVersion(): Version? {
         controller.execute()
         return config.storage.get()
     }

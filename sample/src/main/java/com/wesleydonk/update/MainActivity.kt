@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.wesleydonk.update.fetcher.PrinceOfVersionFetcher
 import com.wesleydonk.update.storage.RoomStorage
-import com.wesleydonk.update.ui.internal.extensions.showTryFragment
+import com.wesleydonk.update.ui.internal.extensions.showUpdateFragment
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         lifecycleScope.launch {
-            val version = update.checkVersion()
-            version?.showTryFragment(this@MainActivity)
+            val version = update.checkLatestVersion()
+            version?.showUpdateFragment(this@MainActivity)
         }
     }
 }

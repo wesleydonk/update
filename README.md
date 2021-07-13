@@ -16,7 +16,10 @@ Publishing can be done by running the following command (MavenLocal)
 
 ## Install
 
-Start by adding the dependencies to the app build.gradle file
+First of all, make sure to have an authorization token for the repo.
+For more info, check the docs of Jitpack (https://jitpack.io/docs/PRIVATE/)
+
+Whenever the authentication is setup of Jitpack, add the dependencies to the app build.gradle file
 ```
 implementation "com.wesleydonk.update:update-core:1.0.0"
 implementation "com.wesleydonk.update:update-storage-room:1.0.0"
@@ -40,13 +43,13 @@ val config = UpdateConfig.Builder()
     .parser(parser)
     .build(this)
 
-val tryNow = Update.Builder()
+val update = Update.Builder()
     .config(config)
     .build()
 
 lifecycleScope.launch {
-    val version = tryNow.checkVersion()
-    version?.showTryFragment(activity)
+    val version = update.checkVersion()
+    version?.showUpdateFragment(activity)
 }
 ```
 
