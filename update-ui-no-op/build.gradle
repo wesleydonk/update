@@ -54,7 +54,7 @@ afterEvaluate {
 
                 groupId = "com.wesleydonk.update"
                 artifactId = "update-ui-no-op"
-                version = libs.versions.library
+                version = libs.versions.library.get()
             }
         }
     }

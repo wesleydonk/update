@@ -2,6 +2,13 @@
 
 Latest is an SDK to ensure the latest build is being used by clients.
 
+## Publishing
+
+Publishing can be done by running the following command (MavenLocal)
+```
+./gradlew publishReleasePublicationToMavenLocal
+```
+
 ## Features
 
 - Configurable SDK to define multiple options (or even custom ones)

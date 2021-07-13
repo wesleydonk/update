@@ -51,7 +51,7 @@ afterEvaluate {
 
                 groupId = "com.wesleydonk.update"
                 artifactId = "update-core"
-                version = libs.versions.library
+                version = libs.versions.library.get()
             }
         }
     }

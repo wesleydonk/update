@@ -1,5 +1,5 @@
 [versions]
-library = "1.0.0"
+library = "0.0.1"
 
 coil = "1.1.1"
 kotlin = "1.5.20"
