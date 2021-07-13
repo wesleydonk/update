@@ -7,7 +7,7 @@ import com.wesleydonk.update.Fetcher
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-class TryoutAppsFetcher(
+class PrinceOfVersionFetcher(
     context: Context,
     private val url: String,
 ) : Fetcher {

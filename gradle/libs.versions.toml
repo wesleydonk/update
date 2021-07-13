@@ -1,4 +1,6 @@
 [versions]
+library = "1.0.0"
+
 coil = "1.1.1"
 kotlin = "1.5.20"
 coroutines = "1.5.1"

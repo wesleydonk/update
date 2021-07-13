@@ -13,7 +13,7 @@ Start by adding the dependencies to the app build.gradle file
 ```
 implementation "com.wesleydonk.update:update-core:1.0.0"
 implementation "com.wesleydonk.update:update-storage-room:1.0.0"
-implementation "com.wesleydonk.update:update-fetcher-tryoutapps:1.0.0"
+implementation "com.wesleydonk.update:update-fetcher-pov3:1.0.0"
 implementation "com.wesleydonk.update:update-ui:1.0.0"
 
 implementation "com.wesleydonk.update:update-core-no-op:1.0.0"
@@ -23,7 +23,7 @@ implementation "com.wesleydonk.update:update-ui-no-op:1.0.0"
 Force updating by adding a check in the initial activity
 ```
 val url = "<link to configuration file>"
-val fetcher = TryoutAppsFetcher(this, url)
+val fetcher = PrinceOfVersionFetcher(this, url)
 val storage = RoomStorage(this)
 val parser = DefaultParser()
 

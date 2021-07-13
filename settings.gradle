@@ -5,7 +5,7 @@ include ':update-core-no-op'
 include ':update-storage-room'
 include ':update-ui'
 include ':update-ui-no-op'
-include ':update-fetcher-tryoutapps'
+include ':update-fetcher-pov3'
 
 // Enable Gradle's version catalog support
 // https://docs.gradle.org/current/userguide/platforms.html

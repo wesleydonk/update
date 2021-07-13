@@ -35,7 +35,7 @@ android {
 dependencies {
     implementation project(":update-core")
     implementation project(":update-storage-room")
-    implementation project(":update-fetcher-tryoutapps")
+    implementation project(':update-fetcher-pov3')
     implementation project(":update-ui")
     implementation libs.kotlin.stdlib
     implementation libs.androidx.core

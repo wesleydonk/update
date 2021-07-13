@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'maven-publish'
 }
 
 android {
@@ -52,4 +53,18 @@ dependencies {
     testImplementation libs.test.junit
     androidTestImplementation libs.androidtest.junit
     androidTestImplementation libs.androidtest.espresso.core
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = "com.wesleydonk.update"
+                artifactId = "update-storage-room"
+                version = libs.versions.library
+            }
+        }
+    }
 }
