@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.wesleydonk.update.fetcher.PrinceOfVersionFetcher
 import com.wesleydonk.update.storage.RoomStorage
+import com.wesleydonk.update.ui.internal.extensions.showUpdateDialogFragment
 import com.wesleydonk.update.ui.internal.extensions.showUpdateFragment
 import kotlinx.coroutines.launch
 
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val url = "https://google.nl"
+        val url = "<link to config>"
         val fetcher = PrinceOfVersionFetcher(this, url)
         val storage = RoomStorage(this)
         val parser = DefaultParser()
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val version = update.checkLatestVersion()
-            version?.showUpdateFragment(this@MainActivity)
+            version?.showUpdateDialogFragment(this@MainActivity)
         }
     }
 }

@@ -11,12 +11,12 @@ interface Controller {
 }
 
 class DefaultController(
-    context: Context,
     private val fetcher: Fetcher,
     private val parser: Parser,
     private val storage: Storage,
-    private val systemDownloadManager: SystemDownloadManager = SystemDownloadManagerImpl(context),
+    private val systemDownloadManager: SystemDownloadManager,
 ) : Controller {
+
     override suspend fun execute() {
         deleteAll()
         when (val result = fetcher.latestVersionResult()) {
@@ -38,13 +38,8 @@ class DefaultController(
     }
 
     companion object {
-        fun ofConfig(config: UpdateConfig): DefaultController {
-            return DefaultController(
-                config.context,
-                config.fetcher,
-                config.parser,
-                config.storage,
-            )
+        fun ofConfig(config: UpdateConfig): DefaultController = with(config) {
+            return DefaultController(fetcher, parser, storage, systemDownloadManager)
         }
     }
 }

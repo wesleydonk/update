@@ -14,5 +14,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/share_provider" />
         </provider>
+        <receiver
+            android:name=".internal.receivers.ApkInstallReceiver"
+            android:exported="false" />
     </application>
 </manifest>
