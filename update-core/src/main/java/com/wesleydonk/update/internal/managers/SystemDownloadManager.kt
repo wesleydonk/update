@@ -64,20 +64,13 @@ class SystemDownloadManagerImpl(
 
             cursor.use {
 
-                val downloadBytes = cursor.getInt(
-                    cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-                )
-                val totalBytes = cursor.getInt(
-                    cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-                )
-                val status =
-                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
                 val filePath = filePath
-
-                Log.d("TRY", "current: $downloadBytes")
-                Log.d("TRY", "total: $totalBytes")
-
+                val downloadBytes =
+                    cursor.getColumnInt(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+                val totalBytes = cursor.getColumnInt(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+                val status = cursor.getColumnInt(DownloadManager.COLUMN_STATUS)
                 val isCompleted = cursor.isCompleted()
+
                 val result = transformDownload(
                     downloadBytes,
                     totalBytes,

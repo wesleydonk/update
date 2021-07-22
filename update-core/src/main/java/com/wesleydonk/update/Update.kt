@@ -1,8 +1,6 @@
 package com.wesleydonk.update
 
-import android.content.Context
 import com.wesleydonk.update.internal.controller.DefaultController
-import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
 
 class Update(
     private val config: UpdateConfig
@@ -13,6 +11,10 @@ class Update(
     }
 
     private val controller = DefaultController.ofConfig(config)
+
+    suspend fun synchronize() {
+        controller.execute()
+    }
 
     suspend fun checkLatestVersion(): Version? {
         controller.execute()
