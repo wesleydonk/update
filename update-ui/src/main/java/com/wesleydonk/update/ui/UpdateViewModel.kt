@@ -2,13 +2,15 @@ package com.wesleydonk.update.ui
 
 import android.content.Context
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.wesleydonk.update.DownloadResult
 import com.wesleydonk.update.Update
 import com.wesleydonk.update.Version
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
-import com.wesleydonk.update.ui.internal.InstallApk
+import com.wesleydonk.update.ui.internal.InstallableFile
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.extensions.Event
 import com.wesleydonk.update.ui.internal.managers.FileManager
@@ -17,14 +19,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
 
+private const val EXTRAS_UPDATE_VERSION = "EXTRAS_UPDATE_VERSION"
+
 internal class UpdateViewModel(
     private val update: Update,
     private val systemDownloadManager: SystemDownloadManager,
-    private val fileManager: FileManager
+    private val fileManager: FileManager,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val installApkData = MutableLiveData<Event<InstallApk>>()
-    val installApk: LiveData<Event<InstallApk>> = installApkData
+    private val installableFileData = MutableLiveData<Event<InstallableFile>>()
+    val installableFile: LiveData<Event<InstallableFile>> = installableFileData
 
     private val downloadIdData = MutableLiveData<Long?>()
     private val downloadStatusData = downloadIdData.switchMap { id ->
@@ -36,18 +41,18 @@ internal class UpdateViewModel(
     }
     val downloadStatus: LiveData<DownloadStatus> = downloadStatusData
 
-    private lateinit var version: Version
-
-    init {
-        viewModelScope.launch {
-            version = update.getStoredVersion()
-                ?: throw IllegalStateException("UI can only be started when new version is available")
+    private var version: Version?
+        get() {
+            return savedStateHandle.get<Version>(EXTRAS_UPDATE_VERSION)
         }
-    }
+        set(version) {
+            savedStateHandle[EXTRAS_UPDATE_VERSION] = version
+        }
 
     fun startDownload() {
         viewModelScope.launch {
-            if (isDownloadInProgress()) {
+            val version = version
+            if (version == null || isDownloadInProgress()) {
                 Log.i("Try", "Download was already started, extra check for safety")
                 return@launch
             }
@@ -64,27 +69,32 @@ internal class UpdateViewModel(
     private fun transformToStatus(result: DownloadResult): DownloadStatus {
         // side effect for triggering the install mechanism
         if (result is DownloadResult.Completed) {
-            val installApk = InstallApk(result.filePath, result.fileMimeType)
-            installApkData.postValue(Event(installApk))
+            val installApk = InstallableFile(result.filePath, result.fileMimeType)
+            installableFileData.postValue(Event(installApk))
         }
 
         return when (result) {
             is DownloadResult.Completed -> DownloadStatus(null)
-            DownloadResult.Failed -> DownloadStatus(null)
             is DownloadResult.InProgress -> DownloadStatus(downloadPercentage = result.percentage)
+            DownloadResult.Failed -> DownloadStatus(null)
         }
     }
 
     class Factory(
         private val context: Context,
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        fragment: Fragment
+    ) : AbstractSavedStateViewModelFactory(fragment, null) {
+        override fun <T : ViewModel?> create(
+            key: String,
+            modelClass: Class<T>,
+            handle: SavedStateHandle
+        ): T {
             if (modelClass.isAssignableFrom(UpdateViewModel::class.java)) {
                 val update = Update.getInstance()
                 val downloadManager = SystemDownloadManagerImpl(context)
                 val fileManager = FileManagerImpl(context)
                 @Suppress("UNCHECKED_CAST")
-                return UpdateViewModel(update, downloadManager, fileManager) as T
+                return UpdateViewModel(update, downloadManager, fileManager, handle) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

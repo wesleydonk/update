@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageInstaller
 import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
-import com.wesleydonk.update.ui.internal.receivers.ApkInstallReceiver
+import com.wesleydonk.update.ui.internal.receivers.InstallationReceiver
 import kotlinx.coroutines.Dispatchers
 import java.io.File
 
@@ -36,7 +36,7 @@ internal class ApkManagerImpl(
                     session.fsync(sessionStream)
                 }
 
-                val intent = Intent(context, ApkInstallReceiver::class.java)
+                val intent = Intent(context, InstallationReceiver::class.java)
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,
                     PI_INSTALL,

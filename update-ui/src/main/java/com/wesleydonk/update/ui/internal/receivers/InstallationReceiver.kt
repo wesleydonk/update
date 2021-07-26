@@ -8,7 +8,7 @@ import android.media.AudioManager
 import android.media.ToneGenerator
 import android.util.Log
 
-internal class ApkInstallReceiver : BroadcastReceiver() {
+internal class InstallationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)
