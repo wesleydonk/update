@@ -1,7 +1,7 @@
-package com.wesleydonk.update.storage.internal.extensions
+package com.wesleydonk.update.internal.extensions
 
 import com.wesleydonk.update.Version
-import com.wesleydonk.update.storage.internal.model.VersionModel
+import com.wesleydonk.update.internal.database.model.VersionModel
 
 internal fun Version.toModel(): VersionModel = VersionModel(version, downloadUrl, downloadId)
 

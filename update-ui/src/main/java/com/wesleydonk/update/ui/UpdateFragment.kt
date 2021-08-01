@@ -86,10 +86,8 @@ class UpdateFragment internal constructor() : Fragment(R.layout.fragment_update)
 
         const val TAG = "UpdateFragment"
 
-        fun newInstance(version: Version): UpdateFragment {
-            return UpdateFragment().apply {
-                arguments = UpdateArguments(version).toBundle()
-            }
+        fun newInstance(): UpdateFragment {
+            return UpdateFragment()
         }
     }
 }

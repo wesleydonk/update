@@ -1,4 +1,4 @@
-package com.wesleydonk.update.storage.internal.model
+package com.wesleydonk.update.internal.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

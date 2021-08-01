@@ -4,9 +4,6 @@ import android.app.DownloadManager
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Environment
-import android.util.Log
-import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.wesleydonk.update.DownloadResult
 import com.wesleydonk.update.Version
