@@ -1,10 +1,8 @@
 package com.wesleydonk.update.internal.controller
 
-import android.content.Context
 import com.wesleydonk.update.*
 import com.wesleydonk.update.Storage
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
-import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
 
 interface Controller {
     suspend fun execute()

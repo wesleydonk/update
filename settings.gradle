@@ -2,7 +2,6 @@ rootProject.name = "Update"
 include ':sample'
 include ':update-core'
 include ':update-core-no-op'
-include ':update-storage-room'
 include ':update-ui'
 include ':update-ui-no-op'
 include ':update-fetcher-pov3'

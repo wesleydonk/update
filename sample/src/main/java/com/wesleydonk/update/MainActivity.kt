@@ -1,12 +1,11 @@
 package com.wesleydonk.update
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.wesleydonk.update.fetcher.PrinceOfVersionFetcher
-import com.wesleydonk.update.storage.RoomStorage
 import com.wesleydonk.update.ui.internal.extensions.showUpdateDialogFragment
-import com.wesleydonk.update.ui.internal.extensions.showUpdateFragment
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -15,13 +14,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val url = "<link to config>"
+        val url = "<link to config file>"
         val fetcher = PrinceOfVersionFetcher(this, url)
-        val storage = RoomStorage(this)
         val parser = DefaultParser()
 
         val config = UpdateConfig.Builder()
-            .storage(storage)
             .fetcher(fetcher)
             .parser(parser)
             .build(this)
@@ -30,9 +27,15 @@ class MainActivity : AppCompatActivity() {
             .config(config)
             .build()
 
+        // Collect stored update results
         lifecycleScope.launch {
-            val version = update.checkLatestVersion()
-            version?.showUpdateDialogFragment(supportFragmentManager)
+            update.getLatestVersion().collect { version ->
+                Log.i("Latest", "Latest: $version")
+                version.showUpdateDialogFragment(supportFragmentManager)
+            }
         }
+
+        // Synchronize remote updates
+        update.synchronize()
     }
 }

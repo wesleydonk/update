@@ -3,6 +3,7 @@ package com.wesleydonk.update
 import android.content.Context
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
+import com.wesleydonk.update.internal.storage.RoomStorage
 
 class UpdateConfig(
     val parser: Parser,
@@ -25,12 +26,9 @@ class UpdateConfig(
             this@Builder.fetcher = fetcher
         }
 
-        fun storage(storage: Storage): Builder = apply {
-            this@Builder.storage = storage
-        }
-
         fun build(context: Context): UpdateConfig {
 
+            storage = RoomStorage(context)
             systemDownloadManager = SystemDownloadManagerImpl(context)
 
             return UpdateConfig(

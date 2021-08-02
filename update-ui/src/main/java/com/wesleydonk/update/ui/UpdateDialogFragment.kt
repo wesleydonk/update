@@ -88,10 +88,8 @@ class UpdateDialogFragment : DialogFragment(R.layout.dialog_fragment_update) {
 
         const val TAG = "UpdateDialogFragment"
 
-        fun newInstance(version: Version): UpdateDialogFragment {
-            return UpdateDialogFragment().apply {
-                arguments = UpdateArguments(version).toBundle()
-            }
+        fun newInstance(): UpdateDialogFragment {
+            return UpdateDialogFragment()
         }
     }
 }

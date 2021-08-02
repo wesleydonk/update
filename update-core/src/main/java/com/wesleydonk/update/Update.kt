@@ -1,28 +1,26 @@
 package com.wesleydonk.update
 
 import com.wesleydonk.update.internal.controller.DefaultController
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class Update(
     private val config: UpdateConfig
 ) {
 
-    init {
-        instance = this
-    }
-
     private val controller = DefaultController.ofConfig(config)
 
-    suspend fun synchronize() {
-        controller.execute()
+    private val scope = MainScope()
+
+    fun synchronize() {
+        scope.launch {
+            controller.execute()
+        }
     }
 
-    suspend fun checkLatestVersion(): Version? {
-        controller.execute()
-        return config.storage.get()
-    }
-
-    suspend fun getStoredVersion(): Version? {
-        return config.storage.get()
+    fun getLatestVersion(): Flow<Version> {
+        return config.storage.getAsFlow()
     }
 
     class Builder(
@@ -36,16 +34,6 @@ class Update(
 
         fun build(): Update {
             return Update(requireNotNull(config))
-        }
-    }
-
-    companion object {
-        @Volatile
-        private var instance: Update? = null
-
-        fun getInstance(): Update {
-            return instance
-                ?: throw IllegalStateException("Update was never created before calling the instance property")
         }
     }
 }

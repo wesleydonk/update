@@ -33,6 +33,7 @@ class PrinceOfVersionFetcher(
                     isMandatory: Boolean,
                     metadata: MutableMap<String, String>
                 ) {
+                    // TODO download_url configuration setup
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
                         CheckVersionResult.NewUpdate(
