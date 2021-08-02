@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.wesleydonk.update.Version
 import com.wesleydonk.update.ui.databinding.FragmentUpdateBinding
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.extensions.observeEvent
@@ -20,7 +21,7 @@ class UpdateFragment internal constructor() : Fragment(R.layout.fragment_update)
 
     private val viewModel by viewModels<UpdateViewModel> {
         val context = requireContext()
-        UpdateViewModel.Factory(context)
+        UpdateViewModel.Factory(context, this)
     }
 
     private val apkManager: ApkManager by lazy { ApkManagerFactory(requireContext()) }
@@ -56,7 +57,7 @@ class UpdateFragment internal constructor() : Fragment(R.layout.fragment_update)
             renderStatus(status)
         }
 
-        viewModel.installApk.observeEvent(viewLifecycleOwner) { installApk ->
+        viewModel.installableFile.observeEvent(viewLifecycleOwner) { installApk ->
             lifecycleScope.launch {
                 apkManager.install(
                     installApk.filePath,
@@ -85,8 +86,10 @@ class UpdateFragment internal constructor() : Fragment(R.layout.fragment_update)
 
         const val TAG = "UpdateFragment"
 
-        fun newInstance(): UpdateFragment {
-            return UpdateFragment()
+        fun newInstance(version: Version): UpdateFragment {
+            return UpdateFragment().apply {
+                arguments = UpdateArguments(version).toBundle()
+            }
         }
     }
 }

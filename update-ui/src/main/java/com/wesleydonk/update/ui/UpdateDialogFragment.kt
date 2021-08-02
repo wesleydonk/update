@@ -8,6 +8,7 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.wesleydonk.update.Version
 import com.wesleydonk.update.ui.databinding.DialogFragmentUpdateBinding
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.extensions.observeEvent
@@ -19,7 +20,7 @@ class UpdateDialogFragment : DialogFragment(R.layout.dialog_fragment_update) {
 
     private val viewModel by viewModels<UpdateViewModel> {
         val context = requireContext()
-        UpdateViewModel.Factory(context)
+        UpdateViewModel.Factory(context, this)
     }
 
     private var binding: DialogFragmentUpdateBinding? = null
@@ -29,7 +30,7 @@ class UpdateDialogFragment : DialogFragment(R.layout.dialog_fragment_update) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = false
-        setStyle(STYLE_NO_TITLE, 0);
+        setStyle(STYLE_NO_TITLE, 0)
     }
 
     override fun onStart() {
@@ -58,11 +59,11 @@ class UpdateDialogFragment : DialogFragment(R.layout.dialog_fragment_update) {
             renderStatus(status)
         }
 
-        viewModel.installApk.observeEvent(viewLifecycleOwner) { installApk ->
+        viewModel.installableFile.observeEvent(viewLifecycleOwner) { file ->
             lifecycleScope.launch {
                 apkManager.install(
-                    installApk.filePath,
-                    installApk.fileMimeType
+                    file.filePath,
+                    file.fileMimeType
                 )
             }
         }
@@ -87,8 +88,10 @@ class UpdateDialogFragment : DialogFragment(R.layout.dialog_fragment_update) {
 
         const val TAG = "UpdateDialogFragment"
 
-        fun newInstance(): UpdateDialogFragment {
-            return UpdateDialogFragment()
+        fun newInstance(version: Version): UpdateDialogFragment {
+            return UpdateDialogFragment().apply {
+                arguments = UpdateArguments(version).toBundle()
+            }
         }
     }
 }

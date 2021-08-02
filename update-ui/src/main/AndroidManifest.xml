@@ -15,7 +15,7 @@
                 android:resource="@xml/share_provider" />
         </provider>
         <receiver
-            android:name=".internal.receivers.ApkInstallReceiver"
+            android:name=".internal.receivers.InstallationReceiver"
             android:exported="false" />
     </application>
 </manifest>

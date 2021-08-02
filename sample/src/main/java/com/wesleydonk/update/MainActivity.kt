@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val version = update.checkLatestVersion()
-            version?.showUpdateDialogFragment(this@MainActivity)
+            version?.showUpdateDialogFragment(supportFragmentManager)
         }
     }
 }
