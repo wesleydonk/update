@@ -1,7 +1,6 @@
 package com.wesleydonk.update.internal.controller
 
 import com.wesleydonk.update.*
-import com.wesleydonk.update.Storage
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 
 interface Controller {

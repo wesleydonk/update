@@ -3,9 +3,7 @@ package com.wesleydonk.update.ui.internal.extensions
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import java.util.*
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

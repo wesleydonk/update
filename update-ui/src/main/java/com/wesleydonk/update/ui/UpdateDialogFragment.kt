@@ -8,7 +8,6 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.wesleydonk.update.Version
 import com.wesleydonk.update.ui.databinding.DialogFragmentUpdateBinding
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.extensions.observeEvent

@@ -1,6 +1,5 @@
 package com.wesleydonk.update.ui.internal.extensions
 
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.wesleydonk.update.Version
 

@@ -2,10 +2,8 @@ package com.wesleydonk.update.internal.storage
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.wesleydonk.update.Storage
 import com.wesleydonk.update.Version
-import com.wesleydonk.update.internal.dao.UpdateDao
 import com.wesleydonk.update.internal.database.UpdateDatabase
 import com.wesleydonk.update.internal.extensions.fromModel
 import com.wesleydonk.update.internal.extensions.toModel

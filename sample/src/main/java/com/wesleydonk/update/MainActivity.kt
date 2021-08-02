@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         // Collect stored update results
         lifecycleScope.launch {
             update.getLatestVersion().collect { version ->
-                Log.i("Latest", "Latest: $version")
                 version.showUpdateDialogFragment(supportFragmentManager)
             }
         }
