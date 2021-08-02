@@ -2,8 +2,6 @@ package com.wesleydonk.update.ui
 
 import android.content.Context
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
 import com.wesleydonk.update.DownloadResult
@@ -11,13 +9,12 @@ import com.wesleydonk.update.Storage
 import com.wesleydonk.update.Version
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
-import com.wesleydonk.update.ui.internal.InstallableFile
 import com.wesleydonk.update.internal.storage.RoomStorage
 import com.wesleydonk.update.ui.internal.DownloadStatus
+import com.wesleydonk.update.ui.internal.InstallableFile
 import com.wesleydonk.update.ui.internal.extensions.Event
 import com.wesleydonk.update.ui.internal.managers.FileManager
 import com.wesleydonk.update.ui.internal.managers.FileManagerImpl
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

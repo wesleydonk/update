@@ -22,7 +22,6 @@ For more info, check the docs of Jitpack (https://jitpack.io/docs/PRIVATE/)
 Whenever the authentication is setup of Jitpack, add the dependencies to the app build.gradle file
 ```
 implementation "com.wesleydonk.update:update-core:1.0.0"
-implementation "com.wesleydonk.update:update-storage-room:1.0.0"
 implementation "com.wesleydonk.update:update-fetcher-pov3:1.0.0"
 implementation "com.wesleydonk.update:update-ui:1.0.0"
 
@@ -48,9 +47,12 @@ val update = Update.Builder()
     .build()
 
 lifecycleScope.launch {
-    val version = update.checkVersion()
-    version?.showUpdateFragment(activity)
+    update.getLatestVersion().collect { version ->
+        version.showUpdateDialogFragment(supportFragmentManager)
+    }
 }
+
+update.synchronize()
 ```
 
 ## no-op implementation

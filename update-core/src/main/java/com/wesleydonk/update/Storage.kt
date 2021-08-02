@@ -1,6 +1,5 @@
 package com.wesleydonk.update
 
-import android.content.Context
 import kotlinx.coroutines.flow.Flow
 
 interface Storage {
