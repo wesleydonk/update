@@ -35,7 +35,7 @@ class RoomStorage(context: Context) : Storage {
         return updateDao.firstOrNullAsFlow()
             .filterNotNull()
             .map { model -> model.fromModel() }
-            .distinctUntilChanged { old, new -> old.version == new.version }
+            .distinctUntilChanged { old, new -> old.id == new.id }
     }
 
     override suspend fun deleteAll() {
