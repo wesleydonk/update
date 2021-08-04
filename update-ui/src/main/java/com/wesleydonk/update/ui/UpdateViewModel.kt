@@ -59,7 +59,7 @@ internal class UpdateViewModel(
                 return@launch
             }
 
-            val filePath = fileManager.createFile(version.version)
+            val filePath = fileManager.createFile(version.id)
             val downloadId = systemDownloadManager.download(version, filePath)
             downloadIdData.value = downloadId
         }
