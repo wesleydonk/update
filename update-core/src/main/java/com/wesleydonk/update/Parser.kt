@@ -7,7 +7,7 @@ interface Parser {
 class DefaultParser : Parser {
     override fun parse(version: CheckVersionResult.NewUpdate): Version {
         return Version(
-            version.version,
+            version.id,
             version.parameters["download_url"].orEmpty(),
             0L
         )

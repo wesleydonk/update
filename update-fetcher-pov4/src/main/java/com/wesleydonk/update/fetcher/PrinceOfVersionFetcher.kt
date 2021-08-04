@@ -27,30 +27,24 @@ class PrinceOfVersionFetcher(
                 return@suspendCancellableCoroutine
             }
 
-            val updateCheck = checkForUpdate(object : UpdaterCallback {
-                override fun onNewUpdate(
-                    version: String,
-                    isMandatory: Boolean,
-                    metadata: MutableMap<String, String>
-                ) {
-                    val updateId = version
-                    val installUrl = metadata["install_url"].orEmpty()
-                    continuation.resume(
-                        CheckVersionResult.NewUpdate(
-                            updateId,
-                            mapOf("download_url" to installUrl)
+            val callback = object : UpdaterCallback {
+                override fun onSuccess(result: UpdateResult) {
+                    val versionResult = when (result.status) {
+                        UpdateStatus.REQUIRED_UPDATE_NEEDED,
+                        UpdateStatus.NEW_UPDATE_AVAILABLE -> CheckVersionResult.NewUpdate(
+                            result.updateVersion.toString(),
+                            result.metadata
                         )
-                    )
-                }
-
-                override fun onNoUpdate(metadata: MutableMap<String, String>) {
-                    continuation.resume(CheckVersionResult.NoUpdate)
+                        else -> CheckVersionResult.NoUpdate
+                    }
+                    continuation.resume(versionResult)
                 }
 
                 override fun onError(error: Throwable) {
                     continuation.resume(CheckVersionResult.NoUpdate)
                 }
-            })
+            }
+            val updateCheck = checkForUpdate(callback)
 
             continuation.invokeOnCancellation {
                 updateCheck.cancel()

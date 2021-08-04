@@ -1,28 +1,25 @@
 package com.wesleydonk.update
 
-class Update(
-    private val config: UpdateConfig
-) {
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-    suspend fun checkVersion(): Version? {
-        return null
+class Update {
+
+    fun synchronize() {
     }
 
-    suspend fun getStoredVersion(): Version? {
-        return null
+    fun getLatestVersion(): Flow<Version> {
+        return flowOf<Version>()
     }
 
-    class Builder(
-        private var config: UpdateConfig? = null
-    ) {
+    class Builder {
 
         fun config(config: UpdateConfig) = apply {
-            this.config = config
             return this
         }
 
         fun build(): Update {
-            return Update(requireNotNull(config))
+            return Update()
         }
     }
 }

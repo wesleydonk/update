@@ -51,7 +51,7 @@ afterEvaluate {
                 from components.release
 
                 groupId = "com.wesleydonk.update"
-                artifactId = "update-fetcher-pov3"
+                artifactId = "update-fetcher-pov4"
                 version = libs.versions.library.get()
             }
         }

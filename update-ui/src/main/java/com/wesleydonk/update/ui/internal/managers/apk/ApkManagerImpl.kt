@@ -17,6 +17,7 @@ internal class ApkManagerImpl(
     private val installer = context.packageManager.packageInstaller
     private val resolver = context.contentResolver
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun install(apkFilePath: String, mimeType: String) {
         with(Dispatchers.IO) {
             val apkUri = FileProvider.getUriForFile(
@@ -25,8 +26,7 @@ internal class ApkManagerImpl(
                 File(apkFilePath)
             )
             resolver.openInputStream(apkUri)?.use { apkStream ->
-                val length =
-                    DocumentFile.fromSingleUri(context, apkUri)?.length() ?: -1
+                val length = DocumentFile.fromSingleUri(context, apkUri)?.length() ?: -1
                 val params =
                     PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
                 val sessionId = installer.createSession(params)

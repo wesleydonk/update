@@ -23,6 +23,7 @@ Whenever the authentication is setup of Jitpack, add the dependencies to the app
 ```
 implementation "com.wesleydonk.update:update-core:1.0.0"
 implementation "com.wesleydonk.update:update-fetcher-pov3:1.0.0"
+implementation "com.wesleydonk.update:update-fetcher-pov4:1.0.0"
 implementation "com.wesleydonk.update:update-ui:1.0.0"
 
 implementation "com.wesleydonk.update:update-core-no-op:1.0.0"
@@ -33,7 +34,6 @@ Force updating by adding a check in the initial activity
 ```
 val url = "<link to configuration file>"
 val fetcher = PrinceOfVersionFetcher(this, url)
-val storage = RoomStorage(this)
 val parser = DefaultParser()
 
 val config = UpdateConfig.Builder()

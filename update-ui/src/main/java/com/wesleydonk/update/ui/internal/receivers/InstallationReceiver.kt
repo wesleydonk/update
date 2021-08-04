@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
-import android.media.AudioManager
-import android.media.ToneGenerator
 import android.util.Log
 
 internal class InstallationReceiver : BroadcastReceiver() {
@@ -15,18 +13,11 @@ internal class InstallationReceiver : BroadcastReceiver() {
         Log.v("UPDATE", "UPDATE STATUS $status")
         when (status) {
             PackageInstaller.STATUS_PENDING_USER_ACTION -> startManualUserAction(context, intent)
-            PackageInstaller.STATUS_SUCCESS -> executeInstalledTone()
+            PackageInstaller.STATUS_SUCCESS -> Unit
             else -> {
                 val msg = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
                 Log.e("UPDATE", "Status message: $msg")
             }
-        }
-    }
-
-    // A signal is sent when the install is completed
-    private fun executeInstalledTone() {
-        ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100).apply {
-            startTone(ToneGenerator.TONE_PROP_ACK)
         }
     }
 
