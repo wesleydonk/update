@@ -36,7 +36,7 @@ class SystemDownloadManagerImpl(
         val request = DownloadManager.Request(url).apply {
             val fileUri = "file://$filePath".toUri()
             setDestinationUri(fileUri)
-            setTitle("Download of new version (${version.version})")
+            setTitle("Download of new version (${version.id})")
         }
 
         return downloadManager.enqueue(request).also {
