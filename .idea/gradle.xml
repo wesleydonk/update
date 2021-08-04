@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/update-core" />
             <option value="$PROJECT_DIR$/update-core-no-op" />
             <option value="$PROJECT_DIR$/update-fetcher-pov3" />
+            <option value="$PROJECT_DIR$/update-fetcher-pov4" />
             <option value="$PROJECT_DIR$/update-ui" />
             <option value="$PROJECT_DIR$/update-ui-no-op" />
           </set>

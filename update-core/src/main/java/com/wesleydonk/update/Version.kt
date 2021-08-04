@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Version(
-    val version: String,
+    val id: String,
     val downloadUrl: String,
     val downloadId: Long?,
 ) : Parcelable
