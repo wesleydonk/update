@@ -30,6 +30,7 @@ implementation "com.wesleydonk.update:update-ui:{latest_version}"
 
 implementation "com.wesleydonk.update:update-core-no-op:{latest_version}"
 implementation "com.wesleydonk.update:update-ui-no-op:{latest_version}"
+implementation "com.wesleydonk.update:update-fetcher-no-op:{latest_version}"
 ```
 
 Force updating by adding a check in the initial activity
