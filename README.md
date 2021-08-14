@@ -1,6 +1,8 @@
-# Latest
+# Update
 
-Latest is an SDK to ensure the latest build is being used by clients.
+A library which helps to reduce the time to support in-app updates outside of the Play Store.  
+
+[![](https://jitpack.io/v/wesleydonk/update.svg)](https://jitpack.io/#wesleydonk/update)
 
 ## Publishing
 
@@ -10,31 +12,39 @@ Publishing can be done by running the following command (MavenLocal)
 ./gradlew publishReleasePublicationToMavenLocal
 ```
 
+## Installation
+
+Add this to your root `build.gradle` file:
+```
+allprojects {
+    repositories {
+        maven { url "https://www.jitpack.io" }
+    }
+}
+```
+
+Add the library to the `app/build.gradle` file:
+```
+implementation "com.github.wesleydonk:update:update-core:{latest_version}"
+implementation "com.github.wesleydonk:update:update-fetcher-pov3:{latest_version}"
+implementation "com.github.wesleydonk:update:update-fetcher-pov4:{latest_version}"
+implementation "com.github.wesleydonk:update:update-ui:{latest_version}"
+
+implementation "com.github.wesleydonk:update:update-core-no-op:{latest_version}"
+implementation "com.github.wesleydonk:update:update-ui-no-op:{latest_version}"
+implementation "com.github.wesleydonk:update:update-fetcher-no-op:{latest_version}"
+```
+
+
 ## Features
 
-- Configurable SDK to define multiple options (or even custom ones)
-- Download and install .apk files directly from within the app itself when needed
+- Provide in-app updates
+- Separate artifacts for Tryoutapps, which uses [Prince of Versions](https://github.com/infinum/Android-Prince-of-Versions).
+- Download and update .apk files directly from within the app itself when required.
 
-## Install
+## Usage
 
-First of all, make sure to have an authorization token for the repo. For more info, check the docs
-of Jitpack (https://jitpack.io/docs/PRIVATE/)
-
-Whenever the authentication is setup of Jitpack, add the dependencies to the app build.gradle file
-
-```
-implementation "com.wesleydonk.update:update-core:{latest_version}"
-implementation "com.wesleydonk.update:update-fetcher-pov3:{latest_version}"
-implementation "com.wesleydonk.update:update-fetcher-pov4:{latest_version}"
-implementation "com.wesleydonk.update:update-ui:{latest_version}"
-
-implementation "com.wesleydonk.update:update-core-no-op:{latest_version}"
-implementation "com.wesleydonk.update:update-ui-no-op:{latest_version}"
-implementation "com.wesleydonk.update:update-fetcher-no-op:{latest_version}"
-```
-
-Force updating by adding a check in the initial activity
-
+There is a [sample](https://github.com/wesleydonk/Update/tree/main/sample) available in the repository. All that it requires is:
 ```
 val url = "<link to configuration file>"
 val fetcher = PrinceOfVersionFetcher(this, url)
@@ -59,7 +69,7 @@ lifecycleScope.launch {
 update.synchronize()
 ```
 
-## Providing the config url in the BuildConfig
+## Connecting to a CI
 
 By providing the config url dynamically from the CI, it can be parsed by the client app. Depending
 on the job/workflow that is running on the CI, the CONFIG_URL can be different. An empty string will
@@ -86,13 +96,11 @@ static def getConfigUrl() {
 Providing the config url as buildconfig property makes it a breeze to use it in the above example.
 
 Replace
-
 ```
 val url = "<link to configuration file>"
 ```
 
 with
-
 ```
 val url = BuildConfig.UPDATE_CONFIG_URL
 ```
