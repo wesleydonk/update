@@ -1,9 +1,7 @@
 package com.wesleydonk.update
 
 import com.wesleydonk.update.internal.controller.DefaultController
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 class Update(
     private val config: UpdateConfig
@@ -11,12 +9,8 @@ class Update(
 
     private val controller = DefaultController.ofConfig(config)
 
-    private val scope = MainScope()
-
-    fun synchronize() {
-        scope.launch {
-            controller.execute()
-        }
+    suspend fun synchronize() {
+        controller.execute()
     }
 
     fun getLatestVersion(): Flow<Version> {

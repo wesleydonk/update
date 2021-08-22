@@ -12,12 +12,15 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/sample-automation" />
             <option value="$PROJECT_DIR$/update-core" />
             <option value="$PROJECT_DIR$/update-core-no-op" />
             <option value="$PROJECT_DIR$/update-fetcher-no-op" />
             <option value="$PROJECT_DIR$/update-fetcher-pov3" />
             <option value="$PROJECT_DIR$/update-fetcher-pov4" />
             <option value="$PROJECT_DIR$/update-ui" />
+            <option value="$PROJECT_DIR$/update-ui-automation" />
+            <option value="$PROJECT_DIR$/update-ui-automation-no-op" />
             <option value="$PROJECT_DIR$/update-ui-no-op" />
           </set>
         </option>
