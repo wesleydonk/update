@@ -27,14 +27,11 @@ class MainActivity : AppCompatActivity() {
             .config(config)
             .build()
 
-        // Collect stored update results
         lifecycleScope.launch {
+            update.synchronize()
             update.getLatestVersion().collect { version ->
                 version.showUpdateDialogFragment(supportFragmentManager)
             }
         }
-
-        // Synchronize remote updates
-        update.synchronize()
     }
 }

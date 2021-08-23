@@ -33,8 +33,10 @@ implementation "com.github.wesleydonk:update:update-ui:{latest_version}"
 implementation "com.github.wesleydonk:update:update-core-no-op:{latest_version}"
 implementation "com.github.wesleydonk:update:update-ui-no-op:{latest_version}"
 implementation "com.github.wesleydonk:update:update-fetcher-no-op:{latest_version}"
-```
 
+implementation "com.github.wesleydonk:update:update-ui-automation:{latest_version}"
+implementation "com.github.wesleydonk:update:update-ui-automation-no-op:{latest_version}"
+```
 
 ## Features
 
@@ -61,12 +63,21 @@ val update = Update.Builder()
     .build()
 
 lifecycleScope.launch {
+    update.synchronize()
+    
     update.getLatestVersion().collect { version ->
         version.showUpdateDialogFragment(supportFragmentManager)
     }
 }
+```
 
-update.synchronize()
+When using the ui-automation library, it is possible to synchronize the Update from the `Application` class:
+```
+val update = Update.Builder()
+    .config(config)
+    .build()
+
+update.synchronize(this, AutomationStrategy.DIALOG_FRAGMENT)
 ```
 
 ## Connecting to a CI
