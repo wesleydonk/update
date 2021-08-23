@@ -29,10 +29,13 @@ implementation "com.github.wesleydonk:update:update-core:{latest_version}"
 implementation "com.github.wesleydonk:update:update-fetcher-pov3:{latest_version}"
 implementation "com.github.wesleydonk:update:update-fetcher-pov4:{latest_version}"
 implementation "com.github.wesleydonk:update:update-ui:{latest_version}"
+implementation "com.github.wesleydonk:update:update-ui-automation:{latest_version}"
 
 implementation "com.github.wesleydonk:update:update-core-no-op:{latest_version}"
 implementation "com.github.wesleydonk:update:update-ui-no-op:{latest_version}"
+implementation "com.github.wesleydonk:update:update-ui-automation-no-op:{latest_version}"
 implementation "com.github.wesleydonk:update:update-fetcher-no-op:{latest_version}"
+
 ```
 
 
@@ -61,12 +64,12 @@ val update = Update.Builder()
     .build()
 
 lifecycleScope.launch {
+    update.synchronize()
+    
     update.getLatestVersion().collect { version ->
         version.showUpdateDialogFragment(supportFragmentManager)
     }
 }
-
-update.synchronize()
 ```
 
 ## Connecting to a CI
