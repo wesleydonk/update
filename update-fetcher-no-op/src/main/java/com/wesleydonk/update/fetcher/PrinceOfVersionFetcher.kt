@@ -4,6 +4,7 @@ import android.content.Context
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
 
+@Suppress("unused", "UNUSED_PARAMETER")
 class PrinceOfVersionFetcher(
     context: Context,
     url: String,
