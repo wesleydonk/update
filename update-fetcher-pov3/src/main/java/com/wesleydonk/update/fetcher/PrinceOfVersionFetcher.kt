@@ -20,10 +20,10 @@ class PrinceOfVersionFetcher(
         return updateChecker.checkForUpdates(loader, updaterCallback)
     }
 
-    override suspend fun latestVersionResult(): CheckVersionResult =
+    override suspend fun latestVersionResult(): CheckVersionResult? =
         suspendCancellableCoroutine { continuation ->
             if (url.isEmpty()) {
-                continuation.resume(CheckVersionResult.NoUpdate)
+                continuation.resume(null)
                 return@suspendCancellableCoroutine
             }
 
@@ -36,7 +36,7 @@ class PrinceOfVersionFetcher(
                     val updateId = version
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
-                        CheckVersionResult.NewUpdate(
+                        CheckVersionResult(
                             updateId,
                             mapOf("download_url" to installUrl)
                         )
@@ -44,11 +44,11 @@ class PrinceOfVersionFetcher(
                 }
 
                 override fun onNoUpdate(metadata: MutableMap<String, String>) {
-                    continuation.resume(CheckVersionResult.NoUpdate)
+                    continuation.resume(null)
                 }
 
                 override fun onError(error: Throwable) {
-                    continuation.resume(CheckVersionResult.NoUpdate)
+                    continuation.resume(null)
                 }
             })
 

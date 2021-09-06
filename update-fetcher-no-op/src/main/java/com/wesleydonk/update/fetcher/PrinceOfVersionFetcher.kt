@@ -6,9 +6,8 @@ import com.wesleydonk.update.Fetcher
 
 class PrinceOfVersionFetcher(
     context: Context,
-    private val url: String,
+    url: String,
 ) : Fetcher {
 
-    override suspend fun latestVersionResult(): CheckVersionResult =
-        CheckVersionResult.NoUpdate
+    override suspend fun latestVersionResult(): CheckVersionResult? = null
 }
