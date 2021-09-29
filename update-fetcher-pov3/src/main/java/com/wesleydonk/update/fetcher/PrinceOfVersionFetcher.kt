@@ -4,6 +4,7 @@ import android.content.Context
 import co.infinum.princeofversions.*
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
+import com.wesleydonk.update.fetcher.internal.SemanticVersionParser
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -14,7 +15,9 @@ class PrinceOfVersionFetcher(
 
     private val loader = NetworkLoader(url)
 
-    private val updateChecker = PrinceOfVersions.Builder().build(context)
+    private val updateChecker = PrinceOfVersions.Builder()
+        .withVersionParser(SemanticVersionParser())
+        .build(context)
 
     private fun checkForUpdate(updaterCallback: UpdaterCallback): PrinceOfVersionsCancelable {
         return updateChecker.checkForUpdates(loader, updaterCallback)
