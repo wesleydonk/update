@@ -16,9 +16,9 @@ class DefaultController(
 
     override suspend fun execute() {
         deleteAll()
-        when (val result = fetcher.latestVersionResult()) {
-            is CheckVersionResult.NewUpdate -> storeUpdate(result)
-            CheckVersionResult.NoUpdate -> Unit
+        val result = fetcher.latestVersionResult()
+        if (result != null) {
+            storeUpdate(result)
         }
     }
 
@@ -29,7 +29,7 @@ class DefaultController(
         storage.deleteAll()
     }
 
-    private suspend fun storeUpdate(update: CheckVersionResult.NewUpdate) {
+    private suspend fun storeUpdate(update: CheckVersionResult) {
         val version = parser.parse(update)
         storage.insert(version)
     }

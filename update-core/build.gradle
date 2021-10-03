@@ -54,9 +54,10 @@ dependencies {
 
     kapt libs.androidx.room.compiler
 
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation libs.test.mockk
+    testImplementation libs.test.junit
+    androidTestImplementation libs.androidtest.junit
+    androidTestImplementation libs.androidtest.espresso.core
 }
 
 afterEvaluate {

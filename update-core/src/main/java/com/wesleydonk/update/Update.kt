@@ -1,13 +1,14 @@
 package com.wesleydonk.update
 
+import com.wesleydonk.update.internal.controller.Controller
 import com.wesleydonk.update.internal.controller.DefaultController
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 
 class Update(
-    private val config: UpdateConfig
+    private val config: UpdateConfig,
+    private val controller: Controller = DefaultController.ofConfig(config)
 ) {
-
-    private val controller = DefaultController.ofConfig(config)
 
     suspend fun synchronize() {
         controller.execute()
@@ -15,6 +16,7 @@ class Update(
 
     fun getLatestVersion(): Flow<Version> {
         return config.storage.getAsFlow()
+            .filterNotNull()
     }
 
     class Builder(

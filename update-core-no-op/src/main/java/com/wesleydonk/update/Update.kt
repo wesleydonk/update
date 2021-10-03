@@ -3,6 +3,7 @@ package com.wesleydonk.update
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@Suppress("unused", "UNUSED_PARAMETER")
 class Update {
 
     fun synchronize() {

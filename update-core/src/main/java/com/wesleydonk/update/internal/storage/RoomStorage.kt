@@ -28,7 +28,8 @@ class RoomStorage(context: Context) : Storage {
 
     override suspend fun get(): Version? {
         return updateDao.getVersionList()
-            .firstOrNull()?.fromModel()
+            .firstOrNull()
+            ?.fromModel()
     }
 
     override fun getAsFlow(): Flow<Version> {
@@ -51,8 +52,8 @@ class RoomStorage(context: Context) : Storage {
             return database ?: synchronized(this) {
                 Room
                     .databaseBuilder(context, UpdateDatabase::class.java, DATABASE_NAME)
-                    .build().also {
-                        database = it
+                    .build().also { database ->
+                        this@Companion.database = database
                     }
             }
         }

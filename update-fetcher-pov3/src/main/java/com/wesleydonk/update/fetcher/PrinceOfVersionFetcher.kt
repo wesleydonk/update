@@ -1,7 +1,9 @@
 package com.wesleydonk.update.fetcher
 
 import android.content.Context
-import co.infinum.princeofversions.*
+import co.infinum.princeofversions.NetworkLoader
+import co.infinum.princeofversions.PrinceOfVersions
+import co.infinum.princeofversions.UpdaterCallback
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.fetcher.internal.SemanticVersionParser
@@ -15,48 +17,44 @@ class PrinceOfVersionFetcher(
 
     private val loader = NetworkLoader(url)
 
-    private val updateChecker = PrinceOfVersions.Builder()
+    private val princeOfVersions = PrinceOfVersions.Builder()
         .withVersionParser(SemanticVersionParser())
         .build(context)
 
-    private fun checkForUpdate(updaterCallback: UpdaterCallback): PrinceOfVersionsCancelable {
-        return updateChecker.checkForUpdates(loader, updaterCallback)
-    }
-
-    override suspend fun latestVersionResult(): CheckVersionResult =
-        suspendCancellableCoroutine { continuation ->
-            if (url.isEmpty()) {
-                continuation.resume(CheckVersionResult.NoUpdate)
-                return@suspendCancellableCoroutine
-            }
-
-            val updateCheck = checkForUpdate(object : UpdaterCallback {
+    override suspend fun latestVersionResult(): CheckVersionResult? {
+        if (url.isEmpty()) {
+            return null
+        }
+        return suspendCancellableCoroutine { continuation ->
+            val callback = object : UpdaterCallback {
                 override fun onNewUpdate(
                     version: String,
                     isMandatory: Boolean,
                     metadata: MutableMap<String, String>
                 ) {
-                    val updateId = version
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
-                        CheckVersionResult.NewUpdate(
-                            updateId,
+                        CheckVersionResult(
+                            version,
                             mapOf("download_url" to installUrl)
                         )
                     )
                 }
 
                 override fun onNoUpdate(metadata: MutableMap<String, String>) {
-                    continuation.resume(CheckVersionResult.NoUpdate)
+                    continuation.resume(null)
                 }
 
                 override fun onError(error: Throwable) {
-                    continuation.resume(CheckVersionResult.NoUpdate)
+                    continuation.resume(null)
                 }
-            })
+            }
+
+            val updateCheck = princeOfVersions.checkForUpdates(loader, callback)
 
             continuation.invokeOnCancellation {
                 updateCheck.cancel()
             }
         }
+    }
 }

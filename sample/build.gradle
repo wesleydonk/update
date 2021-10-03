@@ -46,7 +46,7 @@ dependencies {
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.material
-    implementation libs.test.junit
-    implementation libs.androidtest.junit
-    implementation libs.androidtest.espresso.core
+    testImplementation libs.test.junit
+    androidTestImplementation libs.androidtest.junit
+    androidTestImplementation libs.androidtest.espresso.core
 }
