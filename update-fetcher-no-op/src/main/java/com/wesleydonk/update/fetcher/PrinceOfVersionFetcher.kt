@@ -10,5 +10,5 @@ class PrinceOfVersionFetcher(
     url: String,
 ) : Fetcher {
 
-    override suspend fun latestVersionResult(): CheckVersionResult? = null
+    override suspend fun latestVersionResult(): CheckVersionResult = CheckVersionResult.NoUpdate
 }
