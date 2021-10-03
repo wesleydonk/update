@@ -20,13 +20,11 @@ class PrinceOfVersionFetcher(
         return updateChecker.checkForUpdates(loader, updaterCallback)
     }
 
-    override suspend fun latestVersionResult(): CheckVersionResult? =
-        suspendCancellableCoroutine { continuation ->
-            if (url.isEmpty()) {
-                continuation.resume(null)
-                return@suspendCancellableCoroutine
-            }
-
+    override suspend fun latestVersionResult(): CheckVersionResult? {
+        if (url.isEmpty()) {
+            return null
+        }
+        return suspendCancellableCoroutine { continuation ->
             val callback = object : UpdaterCallback {
                 override fun onSuccess(result: UpdateResult) {
                     val versionResult = when (result.status) {
@@ -44,10 +42,12 @@ class PrinceOfVersionFetcher(
                     continuation.resume(null)
                 }
             }
+
             val updateCheck = checkForUpdate(callback)
 
             continuation.invokeOnCancellation {
                 updateCheck.cancel()
             }
         }
+    }
 }

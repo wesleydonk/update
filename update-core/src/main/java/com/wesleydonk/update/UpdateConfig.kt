@@ -27,7 +27,6 @@ class UpdateConfig(
         }
 
         fun build(context: Context): UpdateConfig {
-
             storage = RoomStorage(context)
             systemDownloadManager = SystemDownloadManagerImpl(context)
 

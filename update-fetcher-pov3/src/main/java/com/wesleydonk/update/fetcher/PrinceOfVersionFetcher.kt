@@ -1,7 +1,9 @@
 package com.wesleydonk.update.fetcher
 
 import android.content.Context
-import co.infinum.princeofversions.*
+import co.infinum.princeofversions.NetworkLoader
+import co.infinum.princeofversions.PrinceOfVersions
+import co.infinum.princeofversions.UpdaterCallback
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -14,30 +16,23 @@ class PrinceOfVersionFetcher(
 
     private val loader = NetworkLoader(url)
 
-    private val updateChecker = PrinceOfVersions.Builder().build(context)
+    private val princeOfVersions = PrinceOfVersions.Builder().build(context)
 
-    private fun checkForUpdate(updaterCallback: UpdaterCallback): PrinceOfVersionsCancelable {
-        return updateChecker.checkForUpdates(loader, updaterCallback)
-    }
-
-    override suspend fun latestVersionResult(): CheckVersionResult? =
-        suspendCancellableCoroutine { continuation ->
-            if (url.isEmpty()) {
-                continuation.resume(null)
-                return@suspendCancellableCoroutine
-            }
-
-            val updateCheck = checkForUpdate(object : UpdaterCallback {
+    override suspend fun latestVersionResult(): CheckVersionResult? {
+        if (url.isEmpty()) {
+            return null
+        }
+        return suspendCancellableCoroutine { continuation ->
+            val callback = object : UpdaterCallback {
                 override fun onNewUpdate(
                     version: String,
                     isMandatory: Boolean,
                     metadata: MutableMap<String, String>
                 ) {
-                    val updateId = version
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
                         CheckVersionResult(
-                            updateId,
+                            version,
                             mapOf("download_url" to installUrl)
                         )
                     )
@@ -50,10 +45,13 @@ class PrinceOfVersionFetcher(
                 override fun onError(error: Throwable) {
                     continuation.resume(null)
                 }
-            })
+            }
+
+            val updateCheck = princeOfVersions.checkForUpdates(loader, callback)
 
             continuation.invokeOnCancellation {
                 updateCheck.cancel()
             }
         }
+    }
 }
