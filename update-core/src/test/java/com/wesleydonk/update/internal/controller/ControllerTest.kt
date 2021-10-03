@@ -31,6 +31,7 @@ class ControllerTest {
         )
         coEvery { storage.get() } returns null
         coEvery { storage.deleteAll() } returns Unit
+        coEvery { storage.insert(any()) } returns Unit
     }
 
     @Test
