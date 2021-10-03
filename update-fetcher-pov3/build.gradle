@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation project(":update-core")
     implementation libs.infinum.pov3
+    implementation libs.semver
 
     implementation libs.kotlinx.coroutines.core
     implementation libs.androidx.core

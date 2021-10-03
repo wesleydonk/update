@@ -6,6 +6,7 @@ import co.infinum.princeofversions.PrinceOfVersions
 import co.infinum.princeofversions.UpdaterCallback
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
+import com.wesleydonk.update.fetcher.internal.SemanticVersionParser
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -16,7 +17,9 @@ class PrinceOfVersionFetcher(
 
     private val loader = NetworkLoader(url)
 
-    private val princeOfVersions = PrinceOfVersions.Builder().build(context)
+    private val princeOfVersions = PrinceOfVersions.Builder()
+        .withVersionParser(SemanticVersionParser())
+        .build(context)
 
     override suspend fun latestVersionResult(): CheckVersionResult? {
         if (url.isEmpty()) {
