@@ -1,8 +1,12 @@
 package com.wesleydonk.update.ui.internal.lifecycle
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import kotlinx.coroutines.flow.Flow
 
 interface ActivityTracker {
-    fun current(): Flow<AppCompatActivity?>
+    val current: Activity?
+
+    fun stream(): Flow<Activity>
+
+    fun offer(activity: Activity)
 }
