@@ -7,6 +7,5 @@ interface ActivityTracker {
     val current: Activity?
 
     fun stream(): Flow<Activity>
-
     fun offer(activity: Activity)
 }
