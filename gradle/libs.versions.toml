@@ -11,7 +11,7 @@ pov4 = "4.0.3"
 mockk = "1.12.0"
 
 [libraries]
-plugin-android-gradle = "com.android.tools.build:gradle:7.1.0-alpha02"
+plugin-android-gradle = "com.android.tools.build:gradle:7.2.0-alpha03"
 plugin-kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }

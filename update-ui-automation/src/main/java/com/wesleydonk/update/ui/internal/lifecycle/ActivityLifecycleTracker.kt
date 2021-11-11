@@ -3,9 +3,11 @@ package com.wesleydonk.update.ui.internal.lifecycle
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.mapNotNull
 import java.lang.ref.WeakReference
 
 class ActivityLifecycleTracker : Application.ActivityLifecycleCallbacks, ActivityTracker {
@@ -23,7 +25,7 @@ class ActivityLifecycleTracker : Application.ActivityLifecycleCallbacks, Activit
     }
 
     override fun stream(): Flow<FragmentActivity> {
-        return currentActivity.asStateFlow().mapNotNull { it.get() }
+        return currentActivity.asStateFlow().mapNotNull { reference -> reference?.get() }
     }
 
     override fun onActivityCreated(activity: Activity, p1: Bundle?) {
