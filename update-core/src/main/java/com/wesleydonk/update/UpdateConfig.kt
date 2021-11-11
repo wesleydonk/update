@@ -26,8 +26,6 @@ class UpdateConfig(
             this@Builder.fetcher = fetcher
         }
 
-        fun storage(storage: Storage): Builder = this
-
         fun build(context: Context): UpdateConfig {
             storage = RoomStorage(context)
             systemDownloadManager = SystemDownloadManagerImpl(context)

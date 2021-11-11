@@ -53,7 +53,6 @@ val fetcher = PrinceOfVersionFetcher(this, url)
 val parser = DefaultParser()
 
 val config = UpdateConfig.Builder()
-    .storage(storage)
     .fetcher(fetcher)
     .parser(parser)
     .build(this)
