@@ -34,10 +34,7 @@ class PrinceOfVersionFetcher(
                 ) {
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
-                        CheckVersionResult(
-                            version,
-                            mapOf("download_url" to installUrl)
-                        )
+                        CheckVersionResult(version, installUrl)
                     )
                 }
 

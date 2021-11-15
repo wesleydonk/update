@@ -8,7 +8,7 @@ class DefaultParser : Parser {
     override fun parse(version: CheckVersionResult): Version {
         return Version(
             version.id,
-            version.parameters["download_url"].orEmpty(),
+            version.downloadUrl,
             0L
         )
     }
