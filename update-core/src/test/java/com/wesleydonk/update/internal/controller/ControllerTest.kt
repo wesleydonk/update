@@ -1,6 +1,5 @@
 package com.wesleydonk.update.internal.controller
 
-import com.wesleydonk.update.DownloadUrlMissingException
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.Parser
 import com.wesleydonk.update.Storage
@@ -74,30 +73,8 @@ class ControllerTest {
         }
     }
 
-    @Test(expected = DownloadUrlMissingException::class)
-    fun `No version is stored when an error is thrown while parsing`() {
-        val result = fakeVersionResult()
-
-        coEvery { fetcher.latestVersionResult() } returns result
-        every { parser.parse(result) } throws DownloadUrlMissingException()
-
-        runBlocking {
-            controller.execute()
-        }
-
-        coVerifyOrder {
-            storage.deleteAll()
-            fetcher.latestVersionResult()
-            parser.parse(any())
-        }
-
-        coVerify(exactly = 0) {
-            storage.insert(any())
-        }
-    }
-
     @Test
-    fun `Version is stored when an error is thrown while parsing`() {
+    fun `Version is stored when parsing succesfully`() {
         val result = fakeVersionResult()
         val version = fakeVersion()
 
