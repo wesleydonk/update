@@ -76,9 +76,9 @@ internal class UpdateViewModel(
         }
 
         return when (result) {
-            is DownloadResult.Completed -> DownloadStatus(null)
+            is DownloadResult.Completed -> DownloadStatus(downloadPercentage = null)
             is DownloadResult.InProgress -> DownloadStatus(downloadPercentage = result.percentage)
-            DownloadResult.Failed -> DownloadStatus(null)
+            DownloadResult.Failed -> DownloadStatus(downloadPercentage = null)
         }
     }
 
