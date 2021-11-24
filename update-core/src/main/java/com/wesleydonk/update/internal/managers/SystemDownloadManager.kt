@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlin.math.roundToInt
 
+private const val DOWNLOAD_URL_FORMAT = "file://%s"
+
 interface SystemDownloadManager {
     suspend fun download(version: Version, filePath: String): Long
     fun delete(downloadId: Long)
@@ -34,9 +36,10 @@ class SystemDownloadManagerImpl(
         this.filePath = filePath
         val url = Uri.parse(version.downloadUrl)
         val request = DownloadManager.Request(url).apply {
-            val fileUri = "file://$filePath".toUri()
-            setDestinationUri(fileUri)
             setTitle("Download of new version (${version.id})")
+
+            val fileUri = DOWNLOAD_URL_FORMAT.format(filePath).toUri()
+            setDestinationUri(fileUri)
         }
 
         return downloadManager.enqueue(request).also {
@@ -62,14 +65,14 @@ class SystemDownloadManagerImpl(
             cursor.use {
 
                 val filePath = filePath
-                val downloadBytes =
+                val downloadedBytes =
                     cursor.getColumnInt(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
                 val totalBytes = cursor.getColumnInt(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
                 val status = cursor.getColumnInt(DownloadManager.COLUMN_STATUS)
                 val isCompleted = cursor.isCompleted()
 
                 val result = transformDownload(
-                    downloadBytes,
+                    downloadedBytes,
                     totalBytes,
                     status,
                     filePath,
@@ -88,7 +91,7 @@ class SystemDownloadManagerImpl(
     }.flowOn(Dispatchers.IO)
 
     private fun transformDownload(
-        downloadBytes: Int,
+        downloadedBytes: Int,
         totalBytes: Int,
         status: Int,
         filePath: String,
@@ -99,12 +102,10 @@ class SystemDownloadManagerImpl(
             val fileMimeType = downloadManager.getMimeTypeForDownloadedFile(id)
             DownloadResult.Completed(filePath, fileMimeType)
         }
-        else -> DownloadResult.InProgress(
-            percentageOf(
-                downloadBytes,
-                totalBytes
-            )
-        )
+        else -> {
+            val percentage = percentageOf(downloadedBytes, totalBytes)
+            DownloadResult.InProgress(percentage)
+        }
     }
 
     private fun percentageOf(value: Int, total: Int): Int {

@@ -2,7 +2,8 @@ package com.wesleydonk.update.ui.internal.managers
 
 import android.content.Context
 
-private const val DIRECTORY_NAME = "Try"
+private const val DIRECTORY_NAME = "Update"
+private const val FILE_NAME_FORMAT = "update-%s.apk"
 
 internal interface FileManager {
     fun createFile(version: String): String
@@ -22,8 +23,7 @@ internal class FileManagerImpl(
             file.deleteRecursively()
         }
 
-        val fileName = "update-$version.apk"
+        val fileName = FILE_NAME_FORMAT.format(version)
         return "$directory/$fileName"
     }
-
 }
