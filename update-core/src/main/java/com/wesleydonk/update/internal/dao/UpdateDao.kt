@@ -1,6 +1,9 @@
 package com.wesleydonk.update.internal.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.wesleydonk.update.internal.database.model.VersionModel
 import kotlinx.coroutines.flow.Flow
 
@@ -12,9 +15,6 @@ internal interface UpdateDao {
 
     @Query("SELECT * FROM version_table")
     suspend fun getVersionList(): List<VersionModel>
-
-    @Update
-    suspend fun update(version: VersionModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(version: VersionModel)
