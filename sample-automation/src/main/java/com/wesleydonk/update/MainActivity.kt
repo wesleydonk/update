@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class SecondActivity: AppCompatActivity() {
+class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
