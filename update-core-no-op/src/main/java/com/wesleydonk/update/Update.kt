@@ -6,8 +6,7 @@ import kotlinx.coroutines.flow.flowOf
 @Suppress("unused", "UNUSED_PARAMETER")
 class Update {
 
-    fun synchronize() {
-    }
+    fun synchronize() = Unit
 
     fun getLatestVersion(): Flow<Version> {
         return flowOf<Version>()

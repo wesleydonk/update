@@ -1,6 +1,10 @@
 package com.wesleydonk.update.internal.controller
 
-import com.wesleydonk.update.*
+import com.wesleydonk.update.CheckVersionResult
+import com.wesleydonk.update.Fetcher
+import com.wesleydonk.update.Parser
+import com.wesleydonk.update.Storage
+import com.wesleydonk.update.UpdateConfig
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 
 interface Controller {

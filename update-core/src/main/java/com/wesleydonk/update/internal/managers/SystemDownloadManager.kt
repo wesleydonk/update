@@ -7,13 +7,14 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.wesleydonk.update.DownloadResult
 import com.wesleydonk.update.Version
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlin.math.roundToInt
 
 private const val DOWNLOAD_URL_FORMAT = "file://%s"
+private const val PERCENTAGE = 100F
 
 interface SystemDownloadManager {
     suspend fun download(version: Version, filePath: String): Long
@@ -109,7 +110,7 @@ class SystemDownloadManagerImpl(
     }
 
     private fun percentageOf(value: Int, total: Int): Int {
-        return ((value.toFloat() / total.toFloat()) * 100F).roundToInt()
+        return ((value.toFloat() / total.toFloat()) * PERCENTAGE).roundToInt()
     }
 }
 

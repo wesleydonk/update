@@ -1,11 +1,16 @@
 package com.wesleydonk.update.fetcher
 
 import android.content.Context
-import co.infinum.princeofversions.*
+import co.infinum.princeofversions.NetworkLoader
+import co.infinum.princeofversions.PrinceOfVersions
+import co.infinum.princeofversions.PrinceOfVersionsCancelable
+import co.infinum.princeofversions.UpdateResult
+import co.infinum.princeofversions.UpdateStatus
+import co.infinum.princeofversions.UpdaterCallback
 import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 class PrinceOfVersionFetcher(
     context: Context,

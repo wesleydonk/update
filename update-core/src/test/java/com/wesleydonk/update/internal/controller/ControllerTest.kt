@@ -6,7 +6,11 @@ import com.wesleydonk.update.Storage
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.models.fakeVersion
 import com.wesleydonk.update.internal.models.fakeVersionResult
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyOrder
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
