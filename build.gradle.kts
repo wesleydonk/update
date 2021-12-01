@@ -34,12 +34,15 @@ dependencies {
     detektPlugins(libs.plugin.detekt.formatting.gradle)
 }
 
+val configFile = file("$rootDir/config/detekt/detekt.yml")
+
 val detektAll by tasks.registering(Detekt::class) {
     description = "Runs over whole code base without the starting overhead for each module."
     parallel = true
     autoCorrect = true
     buildUponDefaultConfig = true
     setSource(files(projectDir))
+    config.setFrom(listOf(configFile))
     include("**/*.kt")
     include("**/*.kts")
     exclude("resources/")
