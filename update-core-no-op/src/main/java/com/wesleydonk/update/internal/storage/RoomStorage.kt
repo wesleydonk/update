@@ -6,6 +6,7 @@ import com.wesleydonk.update.Version
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+@Suppress("UnusedPrivateMember")
 class RoomStorage(context: Context) : Storage {
 
     override suspend fun insert(version: Version) = Unit

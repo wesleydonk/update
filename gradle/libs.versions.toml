@@ -1,6 +1,7 @@
 [versions]
 library = "0.0.1"
 
+detekt = "1.18.1"
 coil = "1.1.1"
 kotlin = "1.5.20"
 coroutines = "1.5.1"
@@ -13,6 +14,7 @@ mockk = "1.12.0"
 [libraries]
 plugin-android-gradle = "com.android.tools.build:gradle:7.2.0-alpha03"
 plugin-kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-detekt-formatting-gradle = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 

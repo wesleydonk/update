@@ -2,7 +2,14 @@ package com.wesleydonk.update.ui
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AbstractSavedStateViewModelFactory
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.wesleydonk.update.DownloadResult
 import com.wesleydonk.update.Storage

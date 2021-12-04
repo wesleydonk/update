@@ -7,8 +7,8 @@ import android.content.pm.PackageInstaller
 import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
 import com.wesleydonk.update.ui.internal.receivers.InstallationReceiver
-import kotlinx.coroutines.Dispatchers
 import java.io.File
+import kotlinx.coroutines.Dispatchers
 
 internal class ApkManagerImpl(
     private val context: Context
