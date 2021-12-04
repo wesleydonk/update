@@ -2,7 +2,9 @@
 buildscript {
     repositories {
         google()
+        // TODO only for pov lib
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath libs.plugin.android.gradle
@@ -16,7 +18,9 @@ buildscript {
 allprojects {
     repositories {
         google()
+        // TODO only for pov lib
         jcenter()
+        mavenCentral()
         maven { url = "https://jitpack.io" }
     }
 }

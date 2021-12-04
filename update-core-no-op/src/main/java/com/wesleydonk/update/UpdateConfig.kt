@@ -22,10 +22,6 @@ class UpdateConfig(
             this@Builder.fetcher = fetcher
         }
 
-        fun storage(storage: Storage): Builder = apply {
-            this@Builder.storage = storage
-        }
-
         fun build(context: Context): UpdateConfig {
             return UpdateConfig(
                 context,

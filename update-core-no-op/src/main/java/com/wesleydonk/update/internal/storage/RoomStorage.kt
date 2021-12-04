@@ -10,8 +10,6 @@ class RoomStorage(context: Context) : Storage {
 
     override suspend fun insert(version: Version) = Unit
 
-    override suspend fun update(version: Version) = Unit
-
     override suspend fun get(): Version? = null
 
     override fun getAsFlow(): Flow<Version> = flowOf()

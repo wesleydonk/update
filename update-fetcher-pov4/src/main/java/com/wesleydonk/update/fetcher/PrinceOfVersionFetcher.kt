@@ -29,10 +29,13 @@ class PrinceOfVersionFetcher(
                 override fun onSuccess(result: UpdateResult) {
                     val versionResult = when (result.status) {
                         UpdateStatus.REQUIRED_UPDATE_NEEDED,
-                        UpdateStatus.NEW_UPDATE_AVAILABLE -> CheckVersionResult(
-                            result.updateVersion.toString(),
-                            result.metadata
-                        )
+                        UpdateStatus.NEW_UPDATE_AVAILABLE -> {
+                            val installUrl = result.metadata["install_url"].orEmpty()
+                            CheckVersionResult(
+                                result.updateVersion.toString(),
+                                installUrl
+                            )
+                        }
                         else -> null
                     }
                     continuation.resume(versionResult)

@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import com.wesleydonk.update.ui.AutomationStrategy
 import com.wesleydonk.update.ui.internal.extensions.showUpdateDialogFragment
 import com.wesleydonk.update.ui.internal.extensions.showUpdateFragment
-import com.wesleydonk.update.ui.internal.lifecycle.ApplicationLifecycleTracker
+import com.wesleydonk.update.ui.internal.lifecycle.ActivityLifecycleTracker
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -18,14 +18,14 @@ fun Update.synchronize(
 ) {
     val scope = MainScope()
 
-    val applicationTracker = ApplicationLifecycleTracker(scope)
+    val applicationTracker = ActivityLifecycleTracker()
     application.registerActivityLifecycleCallbacks(applicationTracker)
 
     scope.launch {
         // sync the update
         synchronize()
 
-        applicationTracker.current()
+        applicationTracker.stream()
             .filterNotNull()
             .combine(getLatestVersion()) { activity, version ->
                 Triple(activity.supportFragmentManager, version, strategy)

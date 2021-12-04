@@ -22,10 +22,6 @@ class RoomStorage(context: Context) : Storage {
         updateDao.insert(version.toModel())
     }
 
-    override suspend fun update(version: Version) {
-        return updateDao.update(version.toModel())
-    }
-
     override suspend fun get(): Version? {
         return updateDao.getVersionList()
             .firstOrNull()

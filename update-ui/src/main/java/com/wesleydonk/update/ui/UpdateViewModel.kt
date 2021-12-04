@@ -41,11 +41,9 @@ internal class UpdateViewModel(
     val downloadStatus: LiveData<DownloadStatus> = downloadStatusData
 
     private var version: Version?
-        get() {
-            return savedStateHandle.get<Version?>(EXTRAS_VERSION)
-        }
+        get() = savedStateHandle.get(EXTRAS_VERSION)
         set(value) {
-            savedStateHandle.set(EXTRAS_VERSION, value)
+            savedStateHandle[EXTRAS_VERSION] = value
         }
 
     fun startDownload() {
@@ -61,6 +59,8 @@ internal class UpdateViewModel(
 
             val filePath = fileManager.createFile(version.id)
             val downloadId = systemDownloadManager.download(version, filePath)
+            storage.insert(version.copy(downloadId = downloadId))
+
             downloadIdData.value = downloadId
         }
     }
@@ -76,9 +76,9 @@ internal class UpdateViewModel(
         }
 
         return when (result) {
-            is DownloadResult.Completed -> DownloadStatus(null)
+            is DownloadResult.Completed -> DownloadStatus(downloadPercentage = null)
             is DownloadResult.InProgress -> DownloadStatus(downloadPercentage = result.percentage)
-            DownloadResult.Failed -> DownloadStatus(null)
+            DownloadResult.Failed -> DownloadStatus(downloadPercentage = null)
         }
     }
 

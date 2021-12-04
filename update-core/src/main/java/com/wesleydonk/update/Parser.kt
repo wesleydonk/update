@@ -1,19 +1,17 @@
 package com.wesleydonk.update
 
-class DownloadUrlMissingException : Throwable()
-
+@Deprecated("Unnecessary mapping which can be done in a fetcher instance")
 interface Parser {
     fun parse(version: CheckVersionResult): Version
 }
 
+@Deprecated("Unnecessary mapping which can be done in a fetcher instance")
 class DefaultParser : Parser {
 
     override fun parse(version: CheckVersionResult): Version {
-        val downloadUrl = version.parameters["download_url"]
-            ?: throw DownloadUrlMissingException()
         return Version(
             id = version.id,
-            downloadUrl = downloadUrl,
+            downloadUrl = version.downloadUrl,
             downloadId = null,
         )
     }
