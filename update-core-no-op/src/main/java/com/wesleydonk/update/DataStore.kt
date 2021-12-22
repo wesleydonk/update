@@ -2,7 +2,7 @@ package com.wesleydonk.update
 
 import kotlinx.coroutines.flow.Flow
 
-interface Storage {
+interface DataStore {
     suspend fun insert(version: Version)
     suspend fun get(): Version?
     fun getAsFlow(): Flow<Version?>

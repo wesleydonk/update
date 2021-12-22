@@ -1,8 +1,8 @@
 package com.wesleydonk.update.internal.controller
 
+import com.wesleydonk.update.DataStore
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.Parser
-import com.wesleydonk.update.Storage
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.models.fakeVersion
 import com.wesleydonk.update.internal.models.fakeVersionResult
@@ -19,7 +19,7 @@ class ControllerTest {
 
     private val fetcher = mockk<Fetcher>()
     private val parser = mockk<Parser>()
-    private val storage = mockk<Storage>()
+    private val dataStore = mockk<DataStore>()
     private val downloadManager = mockk<SystemDownloadManager>()
 
     private lateinit var controller: Controller
@@ -29,12 +29,12 @@ class ControllerTest {
         controller = DefaultController(
             fetcher,
             parser,
-            storage,
+            dataStore,
             downloadManager
         )
-        coEvery { storage.get() } returns null
-        coEvery { storage.deleteAll() } returns Unit
-        coEvery { storage.insert(any()) } returns Unit
+        coEvery { dataStore.get() } returns null
+        coEvery { dataStore.deleteAll() } returns Unit
+        coEvery { dataStore.insert(any()) } returns Unit
     }
 
     @Test
@@ -46,13 +46,13 @@ class ControllerTest {
         }
 
         coVerifyOrder {
-            storage.deleteAll()
+            dataStore.deleteAll()
             fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
             parser.parse(any())
-            storage.insert(any())
+            dataStore.insert(any())
         }
     }
 
@@ -67,13 +67,13 @@ class ControllerTest {
         }
 
         coVerifyOrder {
-            storage.deleteAll()
+            dataStore.deleteAll()
             fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
             parser.parse(any())
-            storage.insert(any())
+            dataStore.insert(any())
         }
     }
 
@@ -90,10 +90,10 @@ class ControllerTest {
         }
 
         coVerifyOrder {
-            storage.deleteAll()
+            dataStore.deleteAll()
             fetcher.getLatestVersion()
             parser.parse(result)
-            storage.insert(version)
+            dataStore.insert(version)
         }
     }
 }
