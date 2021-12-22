@@ -2,5 +2,5 @@ package com.wesleydonk.update
 
 interface Fetcher {
 
-    suspend fun latestVersionResult(): CheckVersionResult?
+    suspend fun getLatestVersion(): VersionApiModel?
 }

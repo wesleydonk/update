@@ -39,7 +39,7 @@ class ControllerTest {
 
     @Test
     fun `No version is stored when no update is available`() {
-        coEvery { fetcher.latestVersionResult() } returns null
+        coEvery { fetcher.getLatestVersion() } returns null
 
         runBlocking {
             controller.execute()
@@ -47,7 +47,7 @@ class ControllerTest {
 
         coVerifyOrder {
             storage.deleteAll()
-            fetcher.latestVersionResult()
+            fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
@@ -60,7 +60,7 @@ class ControllerTest {
     fun `No version is stored when an error is thrown while fetching`() {
         val exception = IllegalStateException()
 
-        coEvery { fetcher.latestVersionResult() } throws exception
+        coEvery { fetcher.getLatestVersion() } throws exception
 
         runBlocking {
             controller.execute()
@@ -68,7 +68,7 @@ class ControllerTest {
 
         coVerifyOrder {
             storage.deleteAll()
-            fetcher.latestVersionResult()
+            fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
@@ -82,7 +82,7 @@ class ControllerTest {
         val result = fakeVersionResult()
         val version = fakeVersion()
 
-        coEvery { fetcher.latestVersionResult() } returns result
+        coEvery { fetcher.getLatestVersion() } returns result
         every { parser.parse(result) } returns version
 
         runBlocking {
@@ -91,7 +91,7 @@ class ControllerTest {
 
         coVerifyOrder {
             storage.deleteAll()
-            fetcher.latestVersionResult()
+            fetcher.getLatestVersion()
             parser.parse(result)
             storage.insert(version)
         }

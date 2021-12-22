@@ -10,7 +10,7 @@ class DefaultParserTest {
     fun `Given version when download url is available`() {
         val url = "simple url"
         val id = "update"
-        val input = CheckVersionResult(id, url)
+        val input = VersionApiModel(id, url)
         val result = parser.parse(input)
 
         assert(result.id == id)

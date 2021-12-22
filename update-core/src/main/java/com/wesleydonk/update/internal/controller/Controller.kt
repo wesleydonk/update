@@ -1,10 +1,10 @@
 package com.wesleydonk.update.internal.controller
 
-import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.Parser
 import com.wesleydonk.update.Storage
 import com.wesleydonk.update.UpdateConfig
+import com.wesleydonk.update.VersionApiModel
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 
 interface Controller {
@@ -20,7 +20,7 @@ class DefaultController(
 
     override suspend fun execute() {
         deleteAll()
-        val result = fetcher.latestVersionResult()
+        val result = fetcher.getLatestVersion()
         if (result != null) {
             storeUpdate(result)
         }
@@ -33,7 +33,7 @@ class DefaultController(
         storage.deleteAll()
     }
 
-    private suspend fun storeUpdate(update: CheckVersionResult) {
+    private suspend fun storeUpdate(update: VersionApiModel) {
         val version = parser.parse(update)
         storage.insert(version)
     }
