@@ -1,6 +1,7 @@
 package com.wesleydonk.update.internal.controller
 
 import com.wesleydonk.update.DataStore
+import com.wesleydonk.update.DefaultParser
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.Parser
 import com.wesleydonk.update.UpdateConfig
@@ -11,12 +12,13 @@ interface Controller {
     suspend fun execute()
 }
 
-class DefaultController(
+internal class DefaultController(
     private val fetcher: Fetcher,
-    private val parser: Parser,
     private val dataStore: DataStore,
     private val systemDownloadManager: SystemDownloadManager,
+    private val parser: Parser = DefaultParser(),
 ) : Controller {
+
 
     override suspend fun execute() {
         deleteAll()
@@ -33,14 +35,14 @@ class DefaultController(
         dataStore.deleteAll()
     }
 
-    private suspend fun storeUpdate(update: VersionApiModel) {
-        val version = parser.parse(update)
+    private suspend fun storeUpdate(model: VersionApiModel) {
+        val version = parser.parse(model)
         dataStore.insert(version)
     }
 
     companion object {
         fun ofConfig(config: UpdateConfig): DefaultController = with(config) {
-            return DefaultController(fetcher, parser, dataStore, systemDownloadManager)
+            return DefaultController(fetcher, dataStore, systemDownloadManager)
         }
     }
 }

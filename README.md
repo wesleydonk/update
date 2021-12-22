@@ -50,11 +50,9 @@ There is a [sample](https://github.com/wesleydonk/Update/tree/main/sample) avail
 ```
 val url = "<link to configuration file>"
 val fetcher = PrinceOfVersionFetcher(this, url)
-val parser = DefaultParser()
 
 val config = UpdateConfig.Builder()
     .fetcher(fetcher)
-    .parser(parser)
     .build(this)
 
 val update = Update.Builder()

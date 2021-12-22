@@ -1,15 +1,15 @@
 package com.wesleydonk.update
 
 internal interface Parser {
-    fun parse(version: VersionApiModel): Version
+    fun parse(model: VersionApiModel): Version
 }
 
 internal class DefaultParser : Parser {
 
-    override fun parse(version: VersionApiModel): Version {
+    override fun parse(model: VersionApiModel): Version {
         return Version(
-            id = version.id,
-            downloadUrl = version.downloadUrl,
+            id = model.id,
+            downloadUrl = model.downloadUrl,
             downloadId = null,
         )
     }
