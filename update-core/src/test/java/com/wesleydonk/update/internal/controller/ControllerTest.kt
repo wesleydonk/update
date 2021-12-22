@@ -28,9 +28,9 @@ class ControllerTest {
     fun setUp() {
         controller = DefaultController(
             fetcher,
-            parser,
             dataStore,
-            downloadManager
+            downloadManager,
+            parser,
         )
         coEvery { dataStore.get() } returns null
         coEvery { dataStore.deleteAll() } returns Unit
