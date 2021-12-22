@@ -4,8 +4,8 @@ import android.content.Context
 import co.infinum.princeofversions.NetworkLoader
 import co.infinum.princeofversions.PrinceOfVersions
 import co.infinum.princeofversions.UpdaterCallback
-import com.wesleydonk.update.CheckVersionResult
 import com.wesleydonk.update.Fetcher
+import com.wesleydonk.update.VersionApiModel
 import com.wesleydonk.update.fetcher.internal.SemanticVersionParser
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -21,7 +21,7 @@ class PrinceOfVersionFetcher(
         .withVersionParser(SemanticVersionParser())
         .build(context)
 
-    override suspend fun latestVersionResult(): CheckVersionResult? {
+    override suspend fun getLatestVersion(): VersionApiModel? {
         if (url.isEmpty()) {
             return null
         }
@@ -34,7 +34,7 @@ class PrinceOfVersionFetcher(
                 ) {
                     val installUrl = metadata["install_url"].orEmpty()
                     continuation.resume(
-                        CheckVersionResult(version, installUrl)
+                        VersionApiModel(version, installUrl)
                     )
                 }
 

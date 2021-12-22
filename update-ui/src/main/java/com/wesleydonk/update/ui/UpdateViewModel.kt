@@ -12,11 +12,11 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import com.wesleydonk.update.DownloadResult
-import com.wesleydonk.update.Storage
+import com.wesleydonk.update.DataStore
 import com.wesleydonk.update.Version
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.managers.SystemDownloadManagerImpl
-import com.wesleydonk.update.internal.storage.RoomStorage
+import com.wesleydonk.update.internal.datastore.LocalDataStore
 import com.wesleydonk.update.ui.internal.DownloadStatus
 import com.wesleydonk.update.ui.internal.InstallableFile
 import com.wesleydonk.update.ui.internal.extensions.Event
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 private const val EXTRAS_VERSION = "EXTRAS_VERSION"
 
 internal class UpdateViewModel(
-    private val storage: Storage,
+    private val dataStore: DataStore,
     private val systemDownloadManager: SystemDownloadManager,
     private val fileManager: FileManager,
     private val savedStateHandle: SavedStateHandle
@@ -55,7 +55,7 @@ internal class UpdateViewModel(
 
     fun startDownload() {
         viewModelScope.launch {
-            val version = version ?: storage.get().also {
+            val version = version ?: dataStore.get().also {
                 this@UpdateViewModel.version = it
             }
 
@@ -66,7 +66,7 @@ internal class UpdateViewModel(
 
             val filePath = fileManager.createFile(version.id)
             val downloadId = systemDownloadManager.download(version, filePath)
-            storage.insert(version.copy(downloadId = downloadId))
+            dataStore.insert(version.copy(downloadId = downloadId))
 
             downloadIdData.value = downloadId
         }
@@ -99,11 +99,11 @@ internal class UpdateViewModel(
             handle: SavedStateHandle
         ): T {
             if (modelClass.isAssignableFrom(UpdateViewModel::class.java)) {
-                val storage = RoomStorage(context)
+                val dataStore = LocalDataStore(context)
                 val downloadManager = SystemDownloadManagerImpl(context)
                 val fileManager = FileManagerImpl(context)
                 @Suppress("UNCHECKED_CAST")
-                return UpdateViewModel(storage, downloadManager, fileManager, handle) as T
+                return UpdateViewModel(dataStore, downloadManager, fileManager, handle) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

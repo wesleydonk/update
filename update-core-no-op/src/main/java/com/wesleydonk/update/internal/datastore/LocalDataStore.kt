@@ -1,13 +1,13 @@
-package com.wesleydonk.update.internal.storage
+package com.wesleydonk.update.internal.datastore
 
 import android.content.Context
-import com.wesleydonk.update.Storage
+import com.wesleydonk.update.DataStore
 import com.wesleydonk.update.Version
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Suppress("UnusedPrivateMember")
-class RoomStorage(context: Context) : Storage {
+class LocalDataStore(context: Context) : DataStore {
 
     override suspend fun insert(version: Version) = Unit
 

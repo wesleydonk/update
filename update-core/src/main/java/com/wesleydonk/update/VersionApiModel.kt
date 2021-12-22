@@ -1,6 +1,6 @@
 package com.wesleydonk.update
 
-class CheckVersionResult(
+class VersionApiModel(
     val id: String,
     val downloadUrl: String
 )

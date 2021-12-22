@@ -1,8 +1,8 @@
 package com.wesleydonk.update.internal.controller
 
+import com.wesleydonk.update.DataStore
 import com.wesleydonk.update.Fetcher
 import com.wesleydonk.update.Parser
-import com.wesleydonk.update.Storage
 import com.wesleydonk.update.internal.managers.SystemDownloadManager
 import com.wesleydonk.update.internal.models.fakeVersion
 import com.wesleydonk.update.internal.models.fakeVersionResult
@@ -19,7 +19,7 @@ class ControllerTest {
 
     private val fetcher = mockk<Fetcher>()
     private val parser = mockk<Parser>()
-    private val storage = mockk<Storage>()
+    private val dataStore = mockk<DataStore>()
     private val downloadManager = mockk<SystemDownloadManager>()
 
     private lateinit var controller: Controller
@@ -28,31 +28,31 @@ class ControllerTest {
     fun setUp() {
         controller = DefaultController(
             fetcher,
+            dataStore,
+            downloadManager,
             parser,
-            storage,
-            downloadManager
         )
-        coEvery { storage.get() } returns null
-        coEvery { storage.deleteAll() } returns Unit
-        coEvery { storage.insert(any()) } returns Unit
+        coEvery { dataStore.get() } returns null
+        coEvery { dataStore.deleteAll() } returns Unit
+        coEvery { dataStore.insert(any()) } returns Unit
     }
 
     @Test
     fun `No version is stored when no update is available`() {
-        coEvery { fetcher.latestVersionResult() } returns null
+        coEvery { fetcher.getLatestVersion() } returns null
 
         runBlocking {
             controller.execute()
         }
 
         coVerifyOrder {
-            storage.deleteAll()
-            fetcher.latestVersionResult()
+            dataStore.deleteAll()
+            fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
             parser.parse(any())
-            storage.insert(any())
+            dataStore.insert(any())
         }
     }
 
@@ -60,20 +60,20 @@ class ControllerTest {
     fun `No version is stored when an error is thrown while fetching`() {
         val exception = IllegalStateException()
 
-        coEvery { fetcher.latestVersionResult() } throws exception
+        coEvery { fetcher.getLatestVersion() } throws exception
 
         runBlocking {
             controller.execute()
         }
 
         coVerifyOrder {
-            storage.deleteAll()
-            fetcher.latestVersionResult()
+            dataStore.deleteAll()
+            fetcher.getLatestVersion()
         }
 
         coVerify(exactly = 0) {
             parser.parse(any())
-            storage.insert(any())
+            dataStore.insert(any())
         }
     }
 
@@ -82,7 +82,7 @@ class ControllerTest {
         val result = fakeVersionResult()
         val version = fakeVersion()
 
-        coEvery { fetcher.latestVersionResult() } returns result
+        coEvery { fetcher.getLatestVersion() } returns result
         every { parser.parse(result) } returns version
 
         runBlocking {
@@ -90,10 +90,10 @@ class ControllerTest {
         }
 
         coVerifyOrder {
-            storage.deleteAll()
-            fetcher.latestVersionResult()
+            dataStore.deleteAll()
+            fetcher.getLatestVersion()
             parser.parse(result)
-            storage.insert(version)
+            dataStore.insert(version)
         }
     }
 }

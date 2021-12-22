@@ -1,8 +1,8 @@
 package com.wesleydonk.update.internal.models
 
-import com.wesleydonk.update.CheckVersionResult
+import com.wesleydonk.update.VersionApiModel
 
-fun fakeVersionResult() = CheckVersionResult(
+fun fakeVersionResult() = VersionApiModel(
     id = "fake",
     "fake_url",
 )

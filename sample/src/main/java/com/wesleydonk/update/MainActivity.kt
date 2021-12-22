@@ -16,11 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         val url = "<link to config file>"
         val fetcher = PrinceOfVersionFetcher(this, url)
-        val parser = DefaultParser()
 
         val config = UpdateConfig.Builder()
             .fetcher(fetcher)
-            .parser(parser)
             .build(this)
 
         val update = Update.Builder()

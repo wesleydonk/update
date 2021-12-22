@@ -1,12 +1,11 @@
-package com.wesleydonk.update.internal.storage
+package com.wesleydonk.update.internal.datastore
 
 import android.content.Context
 import androidx.room.Room
-import com.wesleydonk.update.Storage
+import com.wesleydonk.update.DataStore
 import com.wesleydonk.update.Version
 import com.wesleydonk.update.internal.database.UpdateDatabase
-import com.wesleydonk.update.internal.extensions.fromModel
-import com.wesleydonk.update.internal.extensions.toModel
+import com.wesleydonk.update.internal.database.model.VersionModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -14,7 +13,11 @@ import kotlinx.coroutines.flow.map
 
 private const val DATABASE_NAME = "DATABASE_NAME"
 
-class RoomStorage(context: Context) : Storage {
+private fun Version.toModel(): VersionModel = VersionModel(id, downloadUrl, downloadId)
+
+private fun VersionModel.fromModel(): Version = Version(version, downloadUrl, downloadId)
+
+class LocalDataStore(context: Context) : DataStore {
 
     private val updateDao = getDatabase(context).updateDao()
 

@@ -7,7 +7,7 @@ import co.infinum.princeofversions.PrinceOfVersionsCancelable
 import co.infinum.princeofversions.UpdateResult
 import co.infinum.princeofversions.UpdateStatus
 import co.infinum.princeofversions.UpdaterCallback
-import com.wesleydonk.update.CheckVersionResult
+import com.wesleydonk.update.VersionApiModel
 import com.wesleydonk.update.Fetcher
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -25,7 +25,7 @@ class PrinceOfVersionFetcher(
         return updateChecker.checkForUpdates(loader, updaterCallback)
     }
 
-    override suspend fun latestVersionResult(): CheckVersionResult? {
+    override suspend fun getLatestVersion(): VersionApiModel? {
         if (url.isEmpty()) {
             return null
         }
@@ -36,7 +36,7 @@ class PrinceOfVersionFetcher(
                         UpdateStatus.REQUIRED_UPDATE_NEEDED,
                         UpdateStatus.NEW_UPDATE_AVAILABLE -> {
                             val installUrl = result.metadata["install_url"].orEmpty()
-                            CheckVersionResult(
+                            VersionApiModel(
                                 result.updateVersion.toString(),
                                 installUrl
                             )

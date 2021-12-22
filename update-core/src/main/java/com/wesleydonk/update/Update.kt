@@ -15,7 +15,7 @@ class Update(
     }
 
     fun getLatestVersion(): Flow<Version> {
-        return config.storage.getAsFlow()
+        return config.dataStore.getAsFlow()
             .filterNotNull()
     }
 
